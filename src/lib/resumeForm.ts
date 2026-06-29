@@ -18,7 +18,7 @@ export const mailtoFallback =
   `&body=${encodeURIComponent("Hi Mattie — could you send over your résumé? Thanks!")}`;
 
 // --- 7-day browser memory ---------------------------------------------------
-const MEMORY_KEY = "codebrew.resume.v1";
+const MEMORY_KEY = "code-brew.resume.v1";
 const MEMORY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 export interface ResumeMemory {

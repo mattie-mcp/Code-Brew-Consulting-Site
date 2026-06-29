@@ -1,4 +1,4 @@
-# Codebrew Consulting — Personal Site & Job-Search Hub
+# Code Brew Consulting — Personal Site & Job-Search Hub
 
 > **Source of truth.** This file ties together every planning doc. Start here.
 > When a decision changes, update it here first, then propagate to the relevant `docs/*.md`.
@@ -10,10 +10,10 @@ A personal website that serves two goals, in priority order:
 1. **Primary — land a full-time role.** Position the owner as a senior
    **Engineering Manager / Staff Engineer** (EM-leaning, deeply IC-credible) and
    convert recruiters and hiring managers into conversations.
-2. **Secondary — legitimize Codebrew Consulting.** A real LLC that the owner can
+2. **Secondary — legitimize Code Brew Consulting.** A real LLC that the owner can
    list on applications and reference as proof of independent, end-to-end delivery.
 
-The site is **about the person**; Codebrew is **supporting evidence**, never the headline.
+The site is **about the person**; Code Brew is **supporting evidence**, never the headline.
 It must not read like an agency landing page that confuses an FTE hiring manager.
 
 ## Locked decisions
