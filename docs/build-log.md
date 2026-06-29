@@ -92,8 +92,16 @@
 - **Verification:** `tsc -b` + Vite build clean; walked all 8 sections in-browser against
   the prototype — drill-down/zoom/evidence, single-open receipt accordion, and the restyled
   espresso contact form all confirmed.
-- **Follow-ups (noted):** regenerate `public/og-image.png` in the new palette; swap the
-  favicon for the mug; spot-check small-screen map node collisions.
+- **Follow-ups (noted):** swap the favicon for the mug; spot-check small-screen map node
+  collisions.
 
-<!-- Next entries: og-image refresh, AWS deploy, launch verification -->
+### Entry 8 — Share-preview (og-image) refresh
+- Regenerated `public/og-image.png` (2400×1260) to the coffee-house look: espresso roast +
+  dot grid, mug lockup, Spectral name with the italic-gold "player-coach engineer." line,
+  the headshot ringed in caramel, and the `codebrewconsulting.com` URL — a condensed hero.
+- **How:** rendered a self-contained HTML template (Google Fonts + base64-embedded assets)
+  with headless Chrome at `--force-device-scale-factor=2`, `--window-size=1200,630` → an
+  exact 2400×1260 PNG, matching the existing `og:image:width/height` meta.
+
+<!-- Next entries: favicon (mug), AWS deploy, launch verification -->
 
