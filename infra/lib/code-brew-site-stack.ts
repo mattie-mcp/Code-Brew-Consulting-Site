@@ -21,59 +21,97 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 
-export interface CodebrewSiteStackProps extends StackProps {
-  /** Apex domain, e.g. 'codebrewconsulting.com'. The 'www' subdomain is derived. */
-  readonly domainName: string;
+export type EnvironmentName = 'staging' | 'production';
+
+export interface CodeBrewSiteStackProps extends StackProps {
+  /** Logical environment. Drives resource naming, removal policy, and whether a
+   *  custom domain (ACM + Route 53) is provisioned. */
+  readonly envName: EnvironmentName;
+  /**
+   * Apex domain, e.g. 'codebrewconsulting.com'. The 'www' and 'api' subdomains are
+   * derived. When OMITTED (e.g. staging), the site is served only via the default
+   * CloudFront domain and the form API via its default execute-api endpoint — no ACM
+   * certificate, no Route 53 records, no 'www'.
+   */
+  readonly domainName?: string;
+  /** Verified SES sender identity (must already be verified in this account/region). */
+  readonly senderEmail: string;
+  /** Owner notification recipient for form submissions. */
+  readonly notifyEmail: string;
+  /** Reply-To set on the delivery email. */
+  readonly replyToEmail: string;
 }
 
 /**
- * Provisions static hosting for codebrewconsulting.com:
+ * Provisions static hosting for the Code Brew site, parameterized by environment:
  *   Route 53 (A/AAAA alias) -> CloudFront (ACM cert, OAC) -> private S3 bucket.
+ *
+ * - production: custom domain (apex + www), us-east-1 ACM cert, Route 53 records, and
+ *   the form API behind api.<domain>. Buckets are RETAINed.
+ * - staging:    no custom domain — served via the default *.cloudfront.net URL and the
+ *   default execute-api endpoint. Buckets are DESTROYed (auto-emptied) for clean teardown.
  *
  * The certificate lives in us-east-1 (required for CloudFront) and is DNS-validated
  * against the EXISTING Route 53 hosted zone for the domain.
  */
-export class CodebrewSiteStack extends Stack {
-  constructor(scope: Construct, id: string, props: CodebrewSiteStackProps) {
+export class CodeBrewSiteStack extends Stack {
+  constructor(scope: Construct, id: string, props: CodeBrewSiteStackProps) {
     super(scope, id, props);
 
-    const apexDomain = props.domainName;
-    const wwwDomain = `www.${apexDomain}`;
-    const formApiDomain = `api.${apexDomain}`;
+    const isProd = props.envName === 'production';
+    const hasCustomDomain = !!props.domainName;
 
-    // Cost-tracking tag applied to every taggable resource in this stack.
-    Tags.of(this).add('project', 'codebrew-site');
+    // Production keeps the original (unsuffixed) physical names so an already-deployed
+    // stack is never forced to recreate live resources; other envs get a suffix.
+    const suffix = isProd ? '' : `-${props.envName}`;
+
+    // Production protects content/logs on teardown; non-prod auto-empties for clean destroy.
+    const removalPolicy = isProd ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY;
+    const autoDeleteObjects = !isProd;
+
+    const apexDomain = props.domainName;
+    const wwwDomain = hasCustomDomain ? `www.${apexDomain}` : undefined;
+    const formApiDomain = hasCustomDomain ? `api.${apexDomain}` : undefined;
+
+    // Cost-tracking tags applied to every taggable resource in this stack.
+    Tags.of(this).add('project', 'code-brew-site');
+    Tags.of(this).add('env', props.envName);
 
     // ---------------------------------------------------------------------
     // Existing Route 53 hosted zone (created out of band; we only add records).
+    // Only needed when a custom domain is provisioned (production).
     // fromLookup requires concrete account/region in the stack env (see bin/).
     // ---------------------------------------------------------------------
-    const hostedZone = route53.HostedZone.fromLookup(this, 'HostedZone', {
-      domainName: apexDomain,
-    });
+    const hostedZone = hasCustomDomain
+      ? route53.HostedZone.fromLookup(this, 'HostedZone', {
+          domainName: apexDomain!,
+        })
+      : undefined;
 
     // ---------------------------------------------------------------------
     // ACM certificate in us-east-1, DNS-validated via the hosted zone.
     // Covers the apex + www. CloudFront only accepts certs from us-east-1.
     // ---------------------------------------------------------------------
-    const certificate = new acm.Certificate(this, 'SiteCertificate', {
-      domainName: apexDomain,
-      subjectAlternativeNames: [wwwDomain],
-      validation: acm.CertificateValidation.fromDns(hostedZone),
-    });
+    const certificate = hasCustomDomain
+      ? new acm.Certificate(this, 'SiteCertificate', {
+          domainName: apexDomain!,
+          subjectAlternativeNames: [wwwDomain!],
+          validation: acm.CertificateValidation.fromDns(hostedZone!),
+        })
+      : undefined;
 
     // ---------------------------------------------------------------------
     // Private S3 bucket for the site artifacts (Vite `dist/` output).
     // No public access; served only via CloudFront + Origin Access Control.
     // ---------------------------------------------------------------------
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
-      bucketName: `codebrew-site-${this.account}`,
+      bucketName: `code-brew-site${suffix}-${this.account}`,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
       versioned: false,
-      // RETAIN: never auto-delete production site content on stack removal.
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy,
+      autoDeleteObjects,
     });
 
     // ---------------------------------------------------------------------
@@ -87,23 +125,31 @@ export class CodebrewSiteStack extends Stack {
     // ACL ownership is required so CloudFront can write the log objects.
     // ---------------------------------------------------------------------
     const logsBucket = new s3.Bucket(this, 'AccessLogsBucket', {
-      bucketName: `codebrew-site-logs-${this.account}`,
+      bucketName: `code-brew-site-logs${suffix}-${this.account}`,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
       objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy,
+      autoDeleteObjects,
     });
 
     // ---------------------------------------------------------------------
     // Security response headers: HSTS, X-Content-Type-Options, and a sane CSP.
+    // The policy name is account-global, so it must be unique per environment.
     // ---------------------------------------------------------------------
+    // connect-src: production reaches the API at its custom subdomain; staging
+    // reaches the default execute-api endpoint (exact host unknown at synth → wildcard).
+    const apiConnectSrc = hasCustomDomain
+      ? `https://${formApiDomain}`
+      : `https://*.execute-api.${this.region}.amazonaws.com`;
+
     const responseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(
       this,
       'SecurityHeadersPolicy',
       {
-        responseHeadersPolicyName: 'CodebrewSiteSecurityHeaders',
-        comment: 'HSTS, nosniff, and CSP for codebrewconsulting.com',
+        responseHeadersPolicyName: `CodeBrewSiteSecurityHeaders${suffix}`,
+        comment: `HSTS, nosniff, and CSP for the Code Brew site (${props.envName})`,
         securityHeadersBehavior: {
           strictTransportSecurity: {
             override: true,
@@ -126,11 +172,11 @@ export class CodebrewSiteStack extends Stack {
             contentSecurityPolicy: [
               "default-src 'self'",
               "img-src 'self' data:",
-              // Plausible analytics script; form POSTs go to the API subdomain.
+              // Plausible analytics script; form POSTs go to the API.
               "script-src 'self' https://plausible.io",
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
-              `connect-src 'self' https://${formApiDomain} https://plausible.io`,
+              `connect-src 'self' ${apiConnectSrc} https://plausible.io`,
               "object-src 'none'",
               "base-uri 'self'",
               "frame-ancestors 'none'",
@@ -149,13 +195,15 @@ export class CodebrewSiteStack extends Stack {
     const s3Origin = origins.S3BucketOrigin.withOriginAccessControl(siteBucket);
 
     // ---------------------------------------------------------------------
-    // CloudFront distribution.
+    // CloudFront distribution. With no custom domain (staging) it is served on
+    // the default *.cloudfront.net name and CloudFront's default certificate.
     // ---------------------------------------------------------------------
     const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
-      comment: 'codebrewconsulting.com static site',
+      comment: `Code Brew site (${props.envName})`,
       defaultRootObject: 'index.html',
-      domainNames: [apexDomain, wwwDomain],
-      certificate,
+      ...(hasCustomDomain
+        ? { domainNames: [apexDomain!, wwwDomain!], certificate }
+        : {}),
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
@@ -191,32 +239,35 @@ export class CodebrewSiteStack extends Stack {
 
     // ---------------------------------------------------------------------
     // Route 53 alias records: apex AND www -> the same distribution.
+    // Only when a custom domain is provisioned (production).
     // ---------------------------------------------------------------------
-    const distributionTarget = route53.RecordTarget.fromAlias(
-      new targets.CloudFrontTarget(distribution),
-    );
+    if (hasCustomDomain) {
+      const distributionTarget = route53.RecordTarget.fromAlias(
+        new targets.CloudFrontTarget(distribution),
+      );
 
-    new route53.ARecord(this, 'ApexAliasA', {
-      zone: hostedZone,
-      recordName: apexDomain,
-      target: distributionTarget,
-    });
-    new route53.AaaaRecord(this, 'ApexAliasAaaa', {
-      zone: hostedZone,
-      recordName: apexDomain,
-      target: distributionTarget,
-    });
+      new route53.ARecord(this, 'ApexAliasA', {
+        zone: hostedZone!,
+        recordName: apexDomain,
+        target: distributionTarget,
+      });
+      new route53.AaaaRecord(this, 'ApexAliasAaaa', {
+        zone: hostedZone!,
+        recordName: apexDomain,
+        target: distributionTarget,
+      });
 
-    new route53.ARecord(this, 'WwwAliasA', {
-      zone: hostedZone,
-      recordName: wwwDomain,
-      target: distributionTarget,
-    });
-    new route53.AaaaRecord(this, 'WwwAliasAaaa', {
-      zone: hostedZone,
-      recordName: wwwDomain,
-      target: distributionTarget,
-    });
+      new route53.ARecord(this, 'WwwAliasA', {
+        zone: hostedZone!,
+        recordName: wwwDomain,
+        target: distributionTarget,
+      });
+      new route53.AaaaRecord(this, 'WwwAliasAaaa', {
+        zone: hostedZone!,
+        recordName: wwwDomain,
+        target: distributionTarget,
+      });
+    }
 
     // ---------------------------------------------------------------------
     // Deploy the built site (../dist) to the bucket and invalidate CloudFront.
@@ -231,7 +282,7 @@ export class CodebrewSiteStack extends Stack {
 
     // =====================================================================
     // Résumé-request & contact form backend.
-    //   api.<domain>  →  API Gateway (HTTP API)  →  Lambda  →  SES
+    //   <api>  →  API Gateway (HTTP API)  →  Lambda  →  SES
     //   Résumé stored in a PRIVATE bucket (never a CloudFront path).
     //   Per-IP rate limiting via DynamoDB; honeypot + timing in the Lambda.
     // =====================================================================
@@ -244,11 +295,12 @@ export class CodebrewSiteStack extends Stack {
 
     // --- Private bucket holding the résumé PDF ---------------------------
     const resumeBucket = new s3.Bucket(this, 'ResumeBucket', {
-      bucketName: `codebrew-resume-${this.account}`,
+      bucketName: `code-brew-resume${suffix}-${this.account}`,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy,
+      autoDeleteObjects,
     });
 
     const resumeKey = 'Mattie-Phillips-Resume.pdf';
@@ -281,9 +333,9 @@ export class CodebrewSiteStack extends Stack {
         RESUME_KEY: resumeKey,
         RESUME_FILENAME: resumeKey,
         // SES sender identity — verify this domain/address before going live.
-        FROM_EMAIL: `Mattie Phillips <hello@${apexDomain}>`,
-        REPLY_TO: 'mphillips1695@gmail.com',
-        NOTIFY_EMAIL: 'mphillips1695@gmail.com',
+        FROM_EMAIL: props.senderEmail,
+        REPLY_TO: props.replyToEmail,
+        NOTIFY_EMAIL: props.notifyEmail,
         RATE_TABLE: rateTable.tableName,
         RATE_LIMIT: '5',
         RATE_WINDOW_SEC: '3600',
@@ -300,27 +352,36 @@ export class CodebrewSiteStack extends Stack {
       }),
     );
 
-    // --- ACM cert for the API subdomain (us-east-1, DNS-validated) -------
-    const apiCertificate = new acm.Certificate(this, 'ApiCertificate', {
-      domainName: formApiDomain,
-      validation: acm.CertificateValidation.fromDns(hostedZone),
-    });
+    // --- Optional custom domain for the API (production only) ------------
+    // Without a custom domain (staging), the API is reached via its default
+    // execute-api endpoint, and CORS is opened to any origin since the public
+    // CloudFront host isn't known at synth time and staging is non-public.
+    let apiDomainName: apigwv2.DomainName | undefined;
+    if (hasCustomDomain) {
+      const apiCertificate = new acm.Certificate(this, 'ApiCertificate', {
+        domainName: formApiDomain!,
+        validation: acm.CertificateValidation.fromDns(hostedZone!),
+      });
+      apiDomainName = new apigwv2.DomainName(this, 'ApiDomainName', {
+        domainName: formApiDomain!,
+        certificate: apiCertificate,
+      });
+    }
 
-    const apiDomainName = new apigwv2.DomainName(this, 'ApiDomainName', {
-      domainName: formApiDomain,
-      certificate: apiCertificate,
-    });
+    const allowOrigins = hasCustomDomain
+      ? [`https://${apexDomain}`, `https://${wwwDomain}`]
+      : ['*'];
 
-    // --- HTTP API (CORS locked to the site origin) ----------------------
+    // --- HTTP API (CORS locked to the site origin in production) ---------
     const httpApi = new apigwv2.HttpApi(this, 'FormApi', {
-      description: 'codebrewconsulting.com résumé-request & contact form',
+      description: `Code Brew résumé-request & contact form (${props.envName})`,
       corsPreflight: {
-        allowOrigins: [`https://${apexDomain}`, `https://${wwwDomain}`],
+        allowOrigins,
         allowMethods: [apigwv2.CorsHttpMethod.POST, apigwv2.CorsHttpMethod.OPTIONS],
         allowHeaders: ['content-type'],
         maxAge: Duration.days(1),
       },
-      defaultDomainMapping: { domainName: apiDomainName },
+      ...(apiDomainName ? { defaultDomainMapping: { domainName: apiDomainName } } : {}),
     });
 
     httpApi.addRoutes({
@@ -337,36 +398,45 @@ export class CodebrewSiteStack extends Stack {
     };
 
     // --- Route 53 alias for api.<domain> → the API custom domain --------
-    const apiTarget = route53.RecordTarget.fromAlias(
-      new targets.ApiGatewayv2DomainProperties(
-        apiDomainName.regionalDomainName,
-        apiDomainName.regionalHostedZoneId,
-      ),
-    );
-    new route53.ARecord(this, 'ApiAliasA', {
-      zone: hostedZone,
-      recordName: formApiDomain,
-      target: apiTarget,
-    });
-    new route53.AaaaRecord(this, 'ApiAliasAaaa', {
-      zone: hostedZone,
-      recordName: formApiDomain,
-      target: apiTarget,
-    });
+    if (hasCustomDomain && apiDomainName) {
+      const apiTarget = route53.RecordTarget.fromAlias(
+        new targets.ApiGatewayv2DomainProperties(
+          apiDomainName.regionalDomainName,
+          apiDomainName.regionalHostedZoneId,
+        ),
+      );
+      new route53.ARecord(this, 'ApiAliasA', {
+        zone: hostedZone!,
+        recordName: formApiDomain,
+        target: apiTarget,
+      });
+      new route53.AaaaRecord(this, 'ApiAliasAaaa', {
+        zone: hostedZone!,
+        recordName: formApiDomain,
+        target: apiTarget,
+      });
+    }
 
     // ---------------------------------------------------------------------
     // Outputs.
     // ---------------------------------------------------------------------
+    const siteUrl = hasCustomDomain
+      ? `https://${apexDomain}`
+      : `https://${distribution.distributionDomainName}`;
+    const formApiUrl = hasCustomDomain
+      ? `https://${formApiDomain}/resume-request`
+      : `${httpApi.apiEndpoint}/resume-request`;
+
     new CfnOutput(this, 'DistributionDomainName', {
       value: distribution.distributionDomainName,
       description: 'CloudFront distribution domain name.',
     });
     new CfnOutput(this, 'SiteUrl', {
-      value: `https://${apexDomain}`,
+      value: siteUrl,
       description: 'Public site URL.',
     });
     new CfnOutput(this, 'FormApiUrl', {
-      value: `https://${formApiDomain}/resume-request`,
+      value: formApiUrl,
       description: 'Résumé-request form endpoint (set as VITE_API_BASE host).',
     });
     new CfnOutput(this, 'FormFeatureEnabled', {

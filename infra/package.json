@@ -1,16 +1,23 @@
 {
-  "name": "codebrew-site-infra",
+  "name": "code-brew-site-infra",
   "version": "1.0.0",
   "private": true,
   "description": "AWS CDK app for static hosting of codebrewconsulting.com (S3 + CloudFront + ACM + Route 53).",
   "bin": {
-    "codebrew-site": "bin/codebrew-site.ts"
+    "code-brew-site": "bin/code-brew-site.ts"
   },
   "scripts": {
     "build": "tsc",
     "synth": "cdk synth",
+    "synth:staging": "cdk synth -c env=staging",
+    "synth:prod": "cdk synth -c env=production",
+    "diff": "cdk diff",
+    "diff:staging": "cdk diff -c env=staging",
+    "diff:prod": "cdk diff -c env=production",
     "deploy": "cdk deploy",
-    "diff": "cdk diff"
+    "deploy:staging": "cdk deploy -c env=staging",
+    "deploy:prod": "cdk deploy -c env=production",
+    "destroy:staging": "cdk destroy -c env=staging"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
