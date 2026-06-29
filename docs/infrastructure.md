@@ -40,9 +40,9 @@ cache policies, and the SPA error-response routing.
 - Auth via **OIDC role assumption** (no long-lived AWS keys in the repo).
 - Optional: PR preview builds.
 
-## Résumé-request & contact form backend
+## Resume-request & contact form backend
 
-The site no longer serves the résumé as a public file. The PDF lives in a **private**
+The site no longer serves the resume as a public file. The PDF lives in a **private**
 S3 bucket and is handed out only through a form that captures the lead. See the feature
 spec in [`prompts/feature-resume-request-form.md`](prompts/feature-resume-request-form.md).
 
@@ -50,13 +50,13 @@ spec in [`prompts/feature-resume-request-form.md`](prompts/feature-resume-reques
 api.codebrewconsulting.com (ACM us-east-1 + Route 53 alias)
   └─ API Gateway (HTTP API, CORS locked to the site origin, stage throttled)
        └─ Lambda (Node 20)
-            ├─ S3  GetObject   → private résumé bucket  (codebrew-resume-<acct>)
+            ├─ S3  GetObject   → private resume bucket  (codebrew-resume-<acct>)
             ├─ SES SendEmail   → délivery (PDF attached) + owner notification
             └─ DynamoDB        → per-IP rate-limit counter (TTL-expiring)
 ```
 
 - **Code:** Lambda handler `infra/lambda/resume-request/index.mjs` (no bundling — it
-  uses the AWS SDK v3 that ships in the Node 20 runtime). Résumé asset lives in
+  uses the AWS SDK v3 that ships in the Node 20 runtime). Resume asset lives in
   `infra/assets/resume/` and is deployed to the private bucket via `BucketDeployment`.
 - **Endpoint:** `POST https://api.codebrewconsulting.com/resume-request`.
 - **Spam protection (defense in depth):** hidden honeypot field + minimum
@@ -67,19 +67,23 @@ api.codebrewconsulting.com (ACM us-east-1 + Route 53 alias)
   and Plausible: `connect-src 'self' https://api.codebrewconsulting.com https://plausible.io`
   and `script-src 'self' https://plausible.io`.
 
-### SES — deploy prerequisite (do this before going live)
+### SES — sending setup
 
-The Lambda sends from `hello@codebrewconsulting.com` (env `FROM_EMAIL`). Before the
-form can deliver:
+**Status (2026-06-29): live and sending.** Production access is granted (us-east-1,
+out of the sandbox) and the sending identity is verified.
 
-1. **Verify the sending identity** in SES (us-east-1) — verify the
-   `codebrewconsulting.com` domain (recommended; lets you send from any address on it)
-   or the single `hello@` address. Add the DKIM/SPF records to Route 53.
-2. **Leave the SES sandbox.** In the sandbox, SES will only send to *verified*
-   recipients — so arbitrary requester emails will bounce. Request production access
-   for the account (region us-east-1).
+The Lambda currently sends from `mphillips1695@gmail.com` (env `FROM_EMAIL`), a
+**stopgap** verified email identity. This was set after the originally-configured
+`hello@codebrewconsulting.com` sender caused `MessageRejected` (it was never verified).
 
-Until both are done the rest of the stack deploys fine; only delivery is gated.
+**Follow-up — move off the gmail sender:** sending *from* a `gmail.com` address via
+SES doesn't pass DMARC alignment (weaker deliverability, "via amazonses.com" in the
+From). The proper fix is to verify the `codebrewconsulting.com` domain with DKIM in
+SES (add the DKIM/SPF records to Route 53), then switch `senderEmail` in
+`infra/bin/code-brew-site.ts` back to `hello@codebrewconsulting.com`. See `docs/todo.md`.
+
+> Note: `FROM_EMAIL` was patched directly on the live prod Lambda for an immediate fix;
+> a `cdk deploy` will reconcile it with the (matching) CDK source.
 
 ### Feature flag (cost / abuse kill-switch)
 

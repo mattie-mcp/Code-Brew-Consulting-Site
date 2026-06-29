@@ -1,5 +1,5 @@
 /**
- * Client logic for the résumé-request form: the on/off feature flag, the API
+ * Client logic for the resume-request form: the on/off feature flag, the API
  * call, the 7-day browser memory, and Plausible analytics events.
  */
 
@@ -14,8 +14,8 @@ const ENDPOINT = `${API_BASE.replace(/\/$/, "")}/resume-request`;
 /** Where CTAs point when the form is turned off — a plain mailto, never a dead button. */
 export const mailtoFallback =
   `mailto:${profile.email}` +
-  `?subject=${encodeURIComponent("Résumé request")}` +
-  `&body=${encodeURIComponent("Hi Mattie — could you send over your résumé? Thanks!")}`;
+  `?subject=${encodeURIComponent("Resume request")}` +
+  `&body=${encodeURIComponent("Hi Mattie — could you send over your resume? Thanks!")}`;
 
 // --- 7-day browser memory ---------------------------------------------------
 const MEMORY_KEY = "code-brew.resume.v1";

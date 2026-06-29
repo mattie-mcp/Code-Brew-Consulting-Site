@@ -281,9 +281,9 @@ export class CodeBrewSiteStack extends Stack {
     });
 
     // =====================================================================
-    // Résumé-request & contact form backend.
+    // Resume-request & contact form backend.
     //   <api>  →  API Gateway (HTTP API)  →  Lambda  →  SES
-    //   Résumé stored in a PRIVATE bucket (never a CloudFront path).
+    //   Resume stored in a PRIVATE bucket (never a CloudFront path).
     //   Per-IP rate limiting via DynamoDB; honeypot + timing in the Lambda.
     // =====================================================================
 
@@ -293,7 +293,7 @@ export class CodeBrewSiteStack extends Stack {
     // See docs/infrastructure.md.
     const formEnabled = this.node.tryGetContext('formEnabled') !== 'false';
 
-    // --- Private bucket holding the résumé PDF ---------------------------
+    // --- Private bucket holding the resume PDF ---------------------------
     const resumeBucket = new s3.Bucket(this, 'ResumeBucket', {
       bucketName: `code-brew-resume${suffix}-${this.account}`,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
@@ -374,7 +374,7 @@ export class CodeBrewSiteStack extends Stack {
 
     // --- HTTP API (CORS locked to the site origin in production) ---------
     const httpApi = new apigwv2.HttpApi(this, 'FormApi', {
-      description: `Code Brew résumé-request & contact form (${props.envName})`,
+      description: `Code Brew resume-request & contact form (${props.envName})`,
       corsPreflight: {
         allowOrigins,
         allowMethods: [apigwv2.CorsHttpMethod.POST, apigwv2.CorsHttpMethod.OPTIONS],
@@ -437,11 +437,11 @@ export class CodeBrewSiteStack extends Stack {
     });
     new CfnOutput(this, 'FormApiUrl', {
       value: formApiUrl,
-      description: 'Résumé-request form endpoint (set as VITE_API_BASE host).',
+      description: 'Resume-request form endpoint (set as VITE_API_BASE host).',
     });
     new CfnOutput(this, 'FormFeatureEnabled', {
       value: String(formEnabled),
-      description: 'Whether the résumé form is enabled at deploy time.',
+      description: 'Whether the resume form is enabled at deploy time.',
     });
   }
 }

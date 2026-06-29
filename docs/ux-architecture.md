@@ -1,6 +1,8 @@
 # UX & Information Architecture
 
 > Owner: Information Architect / UX. See [`../PROJECT.md`](../PROJECT.md).
+> **Updated 2026-06-29** for the "Coffee house" redesign (build-log Entry 7). The
+> original "Studio" section map is superseded by the current structure below.
 
 ## Format
 
@@ -9,25 +11,25 @@ sections, smooth in-page navigation. A recruiter can scan top-to-bottom or jump.
 
 ## Section order (top → bottom)
 
-1. **Hero / Above the fold**
-   - Name, target title ("Engineering Manager / Staff Engineer"), one-line value prop.
-   - "Open to opportunities" status chip.
-   - Primary CTA: contact / schedule. Secondary: download resume, LinkedIn, GitHub.
-2. **Summary / "What I do"**
-   - 3–4 sentence narrative. The both/and (lead teams + go deep) stated plainly.
-3. **Selected work / Case studies**
-   - 3–4 cards. Each: context → what I did → measurable outcome.
-   - Mix of employed roles and Codebrew engagements (tagged).
-4. **Experience timeline**
-   - Roles, companies, dates, scope (team size, level). Scannable.
-5. **Skills / Technical depth**
-   - Grouped (languages, infra/cloud, leadership competencies). Honest, not a keyword dump.
-6. **Codebrew Consulting**
-   - One compact section. "How I operate independently." Subordinate, evidence-framed.
-7. **Contact**
-   - Email, scheduling link, social. Low friction. Repeat the "open to roles" signal.
-8. **Footer**
-   - Copyright, resume link, built-with note (subtle engineering flex).
+Matches `src/App.tsx`. The coffee-house theme gives several sections a café framing
+(Menu, House Specials, Receipt) while keeping the underlying content model.
+
+1. **Hero** (`Hero`) — Above the fold
+   - Name, target title ("Engineering Manager · Staff Engineer"), one-line value prop.
+   - "Open to roles" status chip.
+   - Primary CTA: contact. Secondary: request resume (via form), LinkedIn, GitHub.
+2. **About** (`About`) — formerly "Summary / What I do"
+   - Short narrative. The both/and (lead teams + go deep) stated plainly.
+3. **Menu** (`Menu`) — services / "how I operate"
+   - Café-framed services list; folds in the old standalone Consulting section.
+4. **Competency map** (`CompetencyMap`) — technical depth
+   - Interactive drill-down evidence tree. Replaces the flat Skills list.
+5. **Work / House Specials** (`Work`) — case studies
+   - Cards: context → what I did → measurable outcome. Employed + Code Brew engagements (tagged).
+6. **Receipt** (`Receipt`) — experience timeline
+   - Roles, companies, dates, scope. Also hosts the resume-request flow (accordion).
+7. **Contact** (`Contact` + `ContactForm`) — low-friction; repeats the "open to roles" signal.
+   - The standalone footer was folded into this section.
 
 ## Navigation
 
@@ -48,6 +50,8 @@ sections, smooth in-page navigation. A recruiter can scan top-to-bottom or jump.
 
 ## Conversion details
 
-- Resume available as a real downloadable PDF (also good for SEO/applications).
+- Resume is **delivered via the contact/resume-request form** (emailed as a PDF
+  attachment), not a public download link — see `infrastructure.md`. The form
+  doubles as the primary lead-capture path.
 - Every section should have a low-friction path back to "contact me."
 - Print stylesheet so the page itself prints cleanly as a leave-behind.

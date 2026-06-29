@@ -6,7 +6,7 @@ Engineer) and the home of Code Brew Consulting.
 
 It doubles as a work sample: a small, dependency-light React app fronted by a
 fully infrastructure-as-code AWS stack (static hosting + a serverless
-contact/résumé-request API), built end to end with an AI agent team.
+contact/resume-request API), built end to end with an AI agent team.
 
 ## Stack
 
@@ -15,7 +15,7 @@ contact/résumé-request API), built end to end with an AI agent team.
 | Frontend | React 18 + TypeScript, built with Vite 5 |
 | Styling | Hand-authored CSS with design tokens (`src/index.css`); no UI framework |
 | Hosting | Private S3 + CloudFront (OAC), TLS via ACM, DNS via Route 53 |
-| API | API Gateway + Lambda + SES + DynamoDB (résumé-request / contact form) |
+| API | API Gateway + Lambda + SES + DynamoDB (resume-request / contact form) |
 | IaC | AWS CDK (TypeScript), `infra/` |
 | Analytics | Plausible (cookieless) |
 
@@ -35,7 +35,7 @@ else is build-time tooling.
 │   │   ├── profile.ts      # Single source for all site copy
 │   │   └── competencies.ts # Data for the interactive competency map
 │   ├── hooks/useReveal.ts  # Scroll-reveal animation hook
-│   ├── lib/resumeForm.ts   # Client for the résumé-request API
+│   ├── lib/resumeForm.ts   # Client for the resume-request API
 │   └── index.css           # Design tokens + base styles
 ├── infra/                  # AWS CDK app (see infra/README.md)
 ├── docs/                   # Planning docs: positioning, content, UX, design, infra
@@ -61,9 +61,9 @@ npm run dev        # Vite dev server with HMR
 | `npm run preview` | Serve the production build locally |
 | `npm run typecheck` | Type-check only, no emit |
 
-## Résumé-request form
+## Resume-request form
 
-The résumé is gated behind a contact form rather than served as a public PDF
+The resume is gated behind a contact form rather than served as a public PDF
 (it carries PII). The form posts to a serverless API (API Gateway → Lambda →
 SES), with a DynamoDB-backed rate limit. It's controlled by a single feature
 flag that must match on both ends:
@@ -94,7 +94,7 @@ npm run deploy:staging        # staging
 ```
 
 See [`infra/README.md`](infra/README.md) for full prerequisites (SSO auth, Route
-53 zone, the gitignored résumé PDF), bootstrap, environments, and the complete
+53 zone, the gitignored resume PDF), bootstrap, environments, and the complete
 script list.
 
 ## Documentation

@@ -81,10 +81,10 @@
   in the existing React/Vite component architecture, not copied (its `support.js` runtime
   is not shipped).
 - **Structure:** Hero → About → Menu (services) → Competency map → Work (House Specials) →
-  Receipt (résumé accordion) → Contact. `Summary→About`, `Experience→Receipt`, new `Menu`;
+  Receipt (resume accordion) → Contact. `Summary→About`, `Experience→Receipt`, new `Menu`;
   dropped the standalone `Skills` list, the `Consulting` card, and the separate `Footer`
   (folded into Contact).
-- **Owner gates:** keep the backend-wired **résumé-request form** (restyled, not replaced
+- **Owner gates:** keep the backend-wired **resume-request form** (restyled, not replaced
   by the prototype's simulated form); the competency map is the single skills view.
 - **Competency map:** re-laid-out to the prototype's coordinate-space model (cross root +
   fanned children, 0–100 SVG connectors, transform-only zoom guarded by visibility +

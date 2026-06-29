@@ -2,7 +2,7 @@
  * Resume-request & contact form backend.
  *
  * Flow: validate → spam-guard (honeypot + timing + per-IP rate limit) → fetch the
- * résumé from private S3 → email it to the requester (PDF attached + personal blurb)
+ * resume from private S3 → email it to the requester (PDF attached + personal blurb)
  * → notify the owner of the lead. All via AWS SDK v3, which ships in the Lambda
  * Node.js 20 runtime, so this handler needs no bundling and no dependencies.
  *
@@ -12,8 +12,8 @@
  *
  * Env vars (set in the CDK stack):
  *   FEATURE_ENABLED   "true" to enable; anything else disables the feature
- *   RESUME_BUCKET     private S3 bucket holding the résumé PDF
- *   RESUME_KEY        S3 key of the résumé PDF
+ *   RESUME_BUCKET     private S3 bucket holding the resume PDF
+ *   RESUME_KEY        S3 key of the resume PDF
  *   RESUME_FILENAME   filename the requester sees on the attachment
  *   FROM_EMAIL        verified SES sender, e.g. "Mattie Phillips <hello@codebrewconsulting.com>"
  *   REPLY_TO          where requester replies should go (Mattie's inbox)
@@ -51,13 +51,13 @@ const REASON_LABELS = {
 // ---------------------------------------------------------------------------
 // Copy — honest, in Mattie's voice. Safe to edit (Content & Copy Writer owns).
 // ---------------------------------------------------------------------------
-const DELIVERY_SUBJECT = "My résumé — thanks for reaching out";
+const DELIVERY_SUBJECT = "My resume — thanks for reaching out";
 
 function deliveryText(name) {
   const first = (name || "").trim().split(/\s+/)[0] || "there";
   return `Hi ${first},
 
-Thanks for asking — my résumé is attached. I kept the site light on detail on
+Thanks for asking — my resume is attached. I kept the site light on detail on
 purpose, so if anything there raises a question, just reply to this email and it
 comes straight to me.
 
@@ -73,7 +73,7 @@ function deliveryHtml(name) {
   return `<!doctype html><html><body style="margin:0;background:#f7f0e6;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#2c2420;line-height:1.6">
   <div style="max-width:560px;margin:0 auto;background:#fdf8f0;border:1px solid #ddd0bd;border-radius:14px;padding:32px">
     <p style="margin:0 0 16px">Hi ${first},</p>
-    <p style="margin:0 0 16px">Thanks for asking — my résumé is attached. I kept the site light on detail on purpose, so if anything there raises a question, just reply to this email and it comes straight to me.</p>
+    <p style="margin:0 0 16px">Thanks for asking — my resume is attached. I kept the site light on detail on purpose, so if anything there raises a question, just reply to this email and it comes straight to me.</p>
     <p style="margin:0 0 16px">I'm open to technical EM / Staff Engineer roles, and happy to get into specifics about the work, the team, or whatever you're weighing.</p>
     <p style="margin:24px 0 0;color:#6b5d52">— Mattie<br>
     <span style="font-size:14px">Code Brew Consulting · <a href="https://codebrewconsulting.com" style="color:#a8452b">codebrewconsulting.com</a></span></p>
@@ -87,7 +87,7 @@ function deliveryHtml(name) {
 export const handler = async (event) => {
   // Hard kill-switch — before any billable call.
   if (process.env.FEATURE_ENABLED !== "true") {
-    return json(503, { error: "disabled", message: "The résumé form is currently turned off." });
+    return json(503, { error: "disabled", message: "The resume form is currently turned off." });
   }
 
   let body;
@@ -135,7 +135,7 @@ export const handler = async (event) => {
     console.error("rate-limit error", err);
   }
 
-  // Fetch the résumé from private S3.
+  // Fetch the resume from private S3.
   let pdf;
   try {
     const obj = await s3.send(
@@ -143,16 +143,16 @@ export const handler = async (event) => {
     );
     pdf = Buffer.from(await obj.Body.transformToByteArray());
   } catch (err) {
-    console.error("résumé fetch failed", err);
-    return json(500, { error: "delivery_failed", message: "Couldn't attach the résumé just now — please email me and I'll send it straight over." });
+    console.error("resume fetch failed", err);
+    return json(500, { error: "delivery_failed", message: "Couldn't attach the resume just now — please email me and I'll send it straight over." });
   }
 
-  // Deliver the résumé to the requester (PDF attached + personal blurb).
+  // Deliver the resume to the requester (PDF attached + personal blurb).
   try {
     await ses.send(buildDeliveryEmail(name, email, pdf));
   } catch (err) {
     console.error("delivery email failed", err);
-    return json(500, { error: "delivery_failed", message: "Couldn't send the email just now — please email me directly and I'll reply with the résumé." });
+    return json(500, { error: "delivery_failed", message: "Couldn't send the email just now — please email me directly and I'll reply with the resume." });
   }
 
   // Notify the owner of the lead (best-effort — never blocks the requester's success).
@@ -199,7 +199,7 @@ function buildNotificationEmail({ name, email, message, reasons, sourceIp, event
   const when = new Date().toISOString();
 
   const text = [
-    `New résumé request / contact from your site.`,
+    `New resume request / contact from your site.`,
     ``,
     `Name:     ${name}`,
     `Email:    ${email}`,

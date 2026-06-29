@@ -100,8 +100,8 @@ toggle), hero (espresso masthead + headshot), about (centered bio + warm-tint pi
 (paper card, dotted-leader service rows), **competency map** (coordinate-space drill-down:
 cross root → focus node + fanned children, SVG connectors, mono breadcrumb + back, espresso
 evidence card, transform-only zoom guarded by visibility + reduced-motion), work (House
-Specials card grid with espresso category bands), receipt (résumé accordion), contact block
-(espresso form + outlined pill links + footer line), **résumé-request form**.
+Specials card grid with espresso category bands), receipt (resume accordion), contact block
+(espresso form + outlined pill links + footer line), **resume-request form**.
 
 ### Competency map (`CompetencyMap`)
 
@@ -114,7 +114,7 @@ espresso evidence card renders below. Zoom (descend / ascend / evidence) uses th
 Animations API, **transform-only** and skipped when hidden or `prefers-reduced-motion`, so
 content can never be left invisible. Content tree in `src/data/competencies.ts`.
 
-### Résumé-request form (`ContactForm`)
+### Resume-request form (`ContactForm`)
 
 Backend-wired flow (Lambda PDF delivery + Plausible funnel + 7-day returning-visitor
 memory + honeypot) — logic unchanged from the Studio build, restyled for the espresso

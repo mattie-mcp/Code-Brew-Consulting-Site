@@ -36,7 +36,9 @@ const configs: Record<
   production: {
     stackId: 'CodeBrewSiteStack',
     domainName: 'codebrewconsulting.com',
-    senderEmail: 'Mattie Phillips <hello@codebrewconsulting.com>',
+    // TODO: switch back to hello@codebrewconsulting.com once the domain is
+    // verified in SES (DKIM). Using a verified gmail sender for now.
+    senderEmail: 'Mattie Phillips <mphillips1695@gmail.com>',
     notifyEmail: 'mphillips1695@gmail.com',
     replyToEmail: 'mphillips1695@gmail.com',
     description:
@@ -46,7 +48,7 @@ const configs: Record<
     stackId: 'CodeBrewSiteStack-staging',
     // No custom domain: served via the default *.cloudfront.net URL (no ACM/Route 53).
     domainName: undefined,
-    senderEmail: 'Mattie Phillips <hello@codebrewconsulting.com>',
+    senderEmail: 'Mattie Phillips <mphillips1695@gmail.com>',
     notifyEmail: 'mphillips1695@gmail.com',
     replyToEmail: 'mphillips1695@gmail.com',
     description:

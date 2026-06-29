@@ -87,7 +87,7 @@ Each role owns a slice of the work and a doc. Dispatch them per iteration.
 - Content: `src/data/profile.ts` is the single copy source.
 - Infra: `infra/` CDK app (run `cd infra && npm install` before `cdk` commands).
 - Process record: `docs/build-log.md` — the "how this was built with AI" narrative.
-- Résumé delivery: gated behind a **résumé-request & contact form** (API Gateway +
+- Resume delivery: gated behind a **resume-request & contact form** (API Gateway +
   Lambda + SES + private S3 + DynamoDB rate-limit, all in `infra/`). The PDF is no
   longer public. Behind a one-switch feature flag. See `docs/infrastructure.md`.
   Deploy prerequisite: verify SES + leave the sandbox (`docs/todo.md`).

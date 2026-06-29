@@ -32,7 +32,7 @@ feature has failed. Optimize relentlessly for low friction:
 - **Few fields.** Name + email required; a short message and a "why are you reaching
   out?" multi-select are both optional. Nothing else.
 - **Instant, automated delivery.** On submit, an email goes out *immediately* (no
-  human in the loop) with the résumé **attached as a PDF** and a short personal note
+  human in the loop) with the resume **attached as a PDF** and a short personal note
   from me. The success state confirms it's on its way to their inbox.
 - **No heavy CAPTCHA.** Use invisible/low-friction spam protection (honeypot,
   timing, optional rate limit). Don't make a human prove they're a human.
@@ -50,7 +50,7 @@ feature has failed. Optimize relentlessly for low friction:
    the current Contact section) that collects the lead, delivers the resume, and
    notifies me.
 3. **Repoint the CTAs.** The hero's "Resume ↓" and the footer/contact resume links
-   become "Request résumé" / "Get in touch" actions that lead to the form (scroll-to
+   become "Request resume" / "Get in touch" actions that lead to the form (scroll-to
    or reveal), preserving the current CTA hierarchy in the Studio design.
 
 ## Functional requirements
@@ -60,7 +60,7 @@ feature has failed. Optimize relentlessly for low friction:
   options, Content to refine: *Hiring for a role · Recruiting / sourcing · Networking
   / staying in touch · Consulting or contract inquiry · Just saying hello · Other*.
 - Submitting with a valid name + email:
-  - **delivers the résumé to the requester** via an automated email with the **PDF
+  - **delivers the resume to the requester** via an automated email with the **PDF
     attached** and a short personal blurb from me — sent immediately, no human in the
     loop. (Optional nice-to-have: also surface a download link in the success state as
     a backup if the email is slow/filtered — via a short-TTL S3 pre-signed URL, never
@@ -68,7 +68,7 @@ feature has failed. Optimize relentlessly for low friction:
   - **notifies me** (mphillips1695@gmail.com) of the lead: name, email, the optional
     message, the selected reason(s), and any easy context (timestamp; referrer/UTM).
   - shows a clear success state; handles and surfaces errors without losing input.
-- Pure "say hi" submissions (no résumé requested) still notify me.
+- Pure "say hi" submissions (no resume requested) still notify me.
 - Accessible: real labels, keyboard-operable, visible focus, screen-reader-friendly
   validation, honors reduced-motion. Must clear WCAG AA in the Studio palette.
 - Mobile-first: works cleanly at 390px, no horizontal scroll, comfortable tap targets.
@@ -78,7 +78,7 @@ feature has failed. Optimize relentlessly for low friction:
 Once someone has requested the resume, **remember it in their browser** so they
 never have to fill the form twice. On a return visit, recognize the prior request
 and drop straight to frictionless access — re-reveal the download / show a "Welcome
-back — here's the résumé again" path instead of the form. This is the "least
+back — here's the resume again" path instead of the form. This is the "least
 barrier" principle extended across visits.
 
 - Persist a first-party flag on successful request — recommend **`localStorage`**
@@ -91,7 +91,7 @@ barrier" principle extended across visits.
   cleared storage just sees the form again — that's fine; the form is for lead
   capture, not DRM. Don't store anything sensitive.
 - First-party and non-tracking, so **no cookie-consent banner needed.**
-- Use it to tailor the returning-visitor CTA ("Download résumé again") and to avoid
+- Use it to tailor the returning-visitor CTA ("Download resume again") and to avoid
   re-counting a known requester as a brand-new lead.
 
 ## Technical approach — CONFIRMED: AWS-native
@@ -105,7 +105,7 @@ backend; the approach that stays faithful to those locked decisions (and doubles
 an engineering work sample) is:
 
 - **API Gateway (HTTP API) → Lambda → SES.** The Lambda validates input, sends me
-  the lead notification, and delivers the résumé to the requester via SES as an
+  the lead notification, and delivers the resume to the requester via SES as an
   **email with the PDF attached + my personal blurb**. All defined in the existing
   CDK app. (If also offering the optional success-state backup link, the Lambda
   returns a short-TTL S3 pre-signed URL.)
@@ -142,11 +142,11 @@ volume), but I want a hard switch, not a teardown, to turn it off.
 ## Content & copy
 
 - Reframe the CTA from "Resume ↓" (a download) to a **request** that still reads as
-  low-effort and confident — e.g. "Request my résumé" / "Send me your résumé."
+  low-effort and confident — e.g. "Request my resume" / "Send me your resume."
 - Microcopy should reassure: instant delivery, no spam, just so I know who I'm
   talking to. Form labels, the success message, the **"why are you reaching out?"
   option labels**, and the **delivery email — including the short personal blurb from
-  me that accompanies the attached résumé** — are the Content & Copy Writer's call;
+  me that accompanies the attached resume** — are the Content & Copy Writer's call;
   keep them in my voice and honest.
 - Do **not** invent claims; the words elsewhere on the site stay as-is.
 
@@ -155,7 +155,7 @@ volume), but I want a hard switch, not a teardown, to turn it off.
 Have the Recruiter (evaluator) and Brand/Positioning roles pressure-test this: a
 recruiter on a deadline who hits a wall instead of a PDF may bounce. Confirm the
 "least barrier" execution actually feels frictionless from the *other* side of the
-screen, and that "request my résumé" doesn't read as precious. If it does, soften it.
+screen, and that "request my resume" doesn't read as precious. If it does, soften it.
 
 ## Design
 
@@ -173,8 +173,8 @@ error, and resume delivered — so I can see the funnel from CTA → lead → re
 
 - **Frontend Engineer** — form component (incl. the optional reason multi-select),
   validation, states, API wiring, the 7-day browser-memory, and the feature-flag
-  fallback to `mailto:`; strip the direct résumé links; repoint CTAs.
-- **Cloud / DevOps** — API Gateway + Lambda + SES + private résumé storage in CDK;
+  fallback to `mailto:`; strip the direct resume links; repoint CTAs.
+- **Cloud / DevOps** — API Gateway + Lambda + SES + private resume storage in CDK;
   spam protection; CORS; the on/off **feature flag** (front + back) and cost guards;
   SES verification notes; update `docs/infrastructure.md`.
 - **Content & Copy Writer** — form labels, microcopy, success + email copy.
@@ -184,9 +184,9 @@ error, and resume delivered — so I can see the funnel from CTA → lead → re
 
 ## Acceptance criteria
 
-- [ ] No public URL serves the résumé; the PDF is gone from `public/` and stored privately.
+- [ ] No public URL serves the resume; the PDF is gone from `public/` and stored privately.
 - [ ] Hero, Contact, and Footer no longer link a downloadable PDF; they route to the form.
-- [ ] A valid submit (a) emails the requester the résumé as a **PDF attachment + my
+- [ ] A valid submit (a) emails the requester the resume as a **PDF attachment + my
       blurb**, and (b) notifies me with name, email, message, and selected reason(s).
 - [ ] Fields: name + email required; message + "why reaching out?" multi-select
       optional. Low-friction spam protection (honeypot/timing), no heavy CAPTCHA.
@@ -214,9 +214,9 @@ error, and resume delivered — so I can see the funnel from CTA → lead → re
 4. **Notification inbox:** ✅ mphillips1695@gmail.com.
 5. **Feature flag:** ✅ Required — one easy on/off switch (front + back) for cost
    control, with the current state easy to check. See *Feature flag & cost control*.
-6. **Résumé:** ✅ A **new résumé PDF** will be provided to use as the gated file;
-   on-site content (the copy synthesized from the résumé) stays **unchanged for now**.
+6. **Resume:** ✅ A **new resume PDF** will be provided to use as the gated file;
+   on-site content (the copy synthesized from the resume) stays **unchanged for now**.
 7. **Browser memory:** ✅ Remember for **7 days** (stored-timestamp expiry).
 
-> **Still to provide at build time:** the new résumé PDF file (drop it in when ready;
+> **Still to provide at build time:** the new resume PDF file (drop it in when ready;
 > the build can use a placeholder until then).

@@ -53,11 +53,11 @@ Notes:
   the stack looks it up and only adds alias records).
 - A built site at `../dist` (run the app's `npm run build`) before `cdk deploy`, since
   the `BucketDeployment` uploads that directory.
-- **The résumé PDF must be present locally** at `infra/assets/resume/` (e.g.
+- **The resume PDF must be present locally** at `infra/assets/resume/` (e.g.
   `Mattie-Phillips-Resume.pdf`). It is **gitignored** — it carries PII and the gated
   copy must never be public — so a fresh clone will NOT have it. `BucketDeployment`
-  uploads this file to the private résumé bucket at deploy time; if it's missing the
-  gated-résumé deploy fails. Obtain the PDF out of band and drop it in that folder
+  uploads this file to the private resume bucket at deploy time; if it's missing the
+  gated-resume deploy fails. Obtain the PDF out of band and drop it in that folder
   before deploying (or turn the form feature off with `-c formEnabled=false`).
 
 ## Install

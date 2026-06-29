@@ -115,7 +115,7 @@ export const projects: Project[] = [
   },
 ];
 
-/** The Receipt — résumé, itemized. */
+/** The Receipt — resume, itemized. */
 export interface Role {
   title: string;
   company: string;
@@ -186,19 +186,19 @@ export const resume = {
 } as const;
 
 /**
- * Copy + options for the résumé-request / contact form. Voiced to read as a
- * low-effort, confident trade — a name and an email, résumé in your inbox now.
+ * Copy + options for the resume-request / contact form. Voiced to read as a
+ * low-effort, confident trade — a name and an email, resume in your inbox now.
  * The reason `value`s must match the Lambda's REASON_LABELS keys.
  */
 export const resumeForm = {
   // CTA labels used across Hero / Contact / Footer.
-  ctaPrimary: "Request my résumé",
-  ctaShort: "Request résumé",
+  ctaPrimary: "Request my resume",
+  ctaShort: "Request resume",
 
-  eyebrow: "Résumé & contact",
-  title: "Request my résumé — straight to your inbox",
+  eyebrow: "Resume & contact",
+  title: "Request my resume — straight to your inbox",
   intro:
-    "Drop your name and email and the résumé lands in your inbox right away — PDF attached, no waiting. I just like to know who I'm talking to.",
+    "Drop your name and email and the resume lands in your inbox right away — PDF attached, no waiting. I just like to know who I'm talking to.",
   reassurance: "Instant delivery · no spam · just so I know who's reaching out.",
 
   nameLabel: "Your name",
@@ -223,16 +223,16 @@ export const resumeForm = {
   // Success state — warm and human, on-theme with the coffee house.
   successTitle: "Order received! ☕",
   successBody:
-    "Check your inbox — the résumé should land in a moment, with a quick note from me. If it's hiding, peek in spam, or just reply to that email and it comes straight to me.",
+    "Check your inbox — the resume should land in a moment, with a quick note from me. If it's hiding, peek in spam, or just reply to that email and it comes straight to me.",
 
   // Returning visitor (remembered for 7 days in this browser).
   returnTitle: "Welcome back",
-  returnBody: "Want the résumé sent over again? One click and it's back in your inbox.",
-  returnResendLabel: "Resend my résumé",
+  returnBody: "Want the resume sent over again? One click and it's back in your inbox.",
+  returnResendLabel: "Resend my resume",
   returnResendBusyLabel: "Sending…",
   returnSwitchLabel: "Use a different email",
 
   // Error fallbacks (server messages take precedence when present).
   errorGeneric:
-    "Something went sideways sending that. Mind trying again? Or email me directly and I'll reply with the résumé.",
+    "Something went sideways sending that. Mind trying again? Or email me directly and I'll reply with the resume.",
 } as const;
