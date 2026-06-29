@@ -1,0 +1,277 @@
+/* ============================================================
+   Code Brew — Design System
+   "Studio." Warm cream paper, a terracotta accent, and a
+   humanist serif masthead. Editorial, literate, generous —
+   the personal site of a thoughtful engineering leader. Warmth
+   comes from color + type, not decoration. See docs/design-system.md.
+   Components consume these tokens; avoid hard-coded values.
+   ============================================================ */
+
+:root {
+  /* Color — warm ink on cream paper */
+  --bg: #f7f0e6;            /* bone cream */
+  --bg-elev: #fbf6ec;       /* lifted paper */
+  --surface: #fdf8f0;       /* card stock */
+  --surface-2: #efe6d6;     /* recessed / pressed */
+  --text: #2c2420;          /* warm near-black ink */
+  --text-muted: #6b5d52;    /* muted warm brown (AA on paper) */
+  --text-faint: #948578;    /* faint metadata (AA-large) */
+
+  /* Terracotta accent — the single warm hue */
+  --accent: #c45a3b;        /* terracotta — display fills, hover, decoration */
+  --accent-text: #a8452b;   /* deepened terracotta for links + button fills (AA) */
+  --accent-soft: #d2725a;   /* display-size / hover only */
+  --accent-cyan: #7d7a4f;   /* secondary signal — warm olive */
+  --accent-dim: rgba(196, 90, 59, 0.10);
+  --accent-ink: #ffffff;    /* text on the accent */
+
+  --border: #ddd0bd;        /* warm hairline */
+  --border-soft: #e7dccb;
+  --grid-line: rgba(44, 36, 32, 0.035);  /* very faint warm paper grid */
+
+  --ok: #5e7a3f;            /* status / "open" signal — warm olive-green, AA on paper */
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Scale (8px grid) */
+  --sp-1: 0.5rem;
+  --sp-2: 1rem;
+  --sp-3: 1.5rem;
+  --sp-4: 2rem;
+  --sp-6: 3rem;
+  --sp-8: 4rem;
+  --sp-12: 6rem;
+
+  --maxw: 1080px;
+  --grid: 32px;             /* faint paper grid cell */
+
+  /* Softer, editorial geometry — rounded, not rectilinear */
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-pill: 999px;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-color: var(--bg);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  line-height: 1.04;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+a {
+  color: var(--accent-text);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+a:hover { color: var(--accent); }
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- Layout helpers ---- */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--sp-3);
+}
+
+.section {
+  position: relative;
+  padding: var(--sp-12) 0;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* Tighten inter-section rhythm on phones so generous gutters don't bury
+   content below the fold. */
+@media (max-width: 760px) {
+  .section { padding: var(--sp-8) 0; }
+}
+
+/* Section eyebrow — a warm, confident uppercase label (no crosshair). */
+.section__eyebrow {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin-bottom: var(--sp-2);
+}
+
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 3.8vw, 2.8rem);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sp-4);
+}
+
+/* ---- Corner registration ticks — kept as a quiet, warm framing accent. ---- */
+.crop { position: relative; }
+.crop::before,
+.crop::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--accent);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.crop::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.crop::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+/* ---- Buttons / chips ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: var(--surface);
+  transition: transform 0.15s ease, border-color 0.15s ease,
+    background 0.15s ease, color 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.btn--primary {
+  background: var(--accent-text);
+  border-color: var(--accent-text);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.btn--primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Co-primary: a clear second-strongest action (e.g. Resume) — outlined
+   in the accent so two next-steps read above the social links. */
+.btn--strong {
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.btn--strong:hover {
+  background: var(--accent-dim);
+}
+
+/* Quiet: demoted utility links (LinkedIn / GitHub) — lighter weight,
+   no border until hover, so they recede from the primary actions. */
+.btn--quiet {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-muted);
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+}
+.btn--quiet:hover {
+  border-color: var(--border);
+  color: var(--accent-text);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  background: var(--surface);
+}
+.chip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px rgba(94, 122, 63, 0.2);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  padding: 0.26rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent-dim);
+  color: var(--accent-text);
+  white-space: nowrap;
+  /* Never let a long single tag push past its column on narrow viewports.
+     Short tags stay on one line; only over-long ones wrap. */
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 480px) {
+  .tag { white-space: normal; }
+}
+
+/* ---- Scroll reveal (gated by reduced-motion above) ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}

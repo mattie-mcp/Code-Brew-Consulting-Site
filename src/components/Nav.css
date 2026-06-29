@@ -1,0 +1,96 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
+  border-bottom: 1px solid transparent;
+}
+.nav--scrolled {
+  /* Solid-ish fallback first; browsers with backdrop-filter get the glass. */
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom-color: var(--border-soft);
+}
+@supports (backdrop-filter: blur(10px)) {
+  .nav--scrolled {
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+  }
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4.5rem;
+}
+
+.nav__brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.nav__brand:hover { color: var(--text); }
+.nav__brand-mark {
+  color: var(--accent);
+  margin-right: 0.4rem;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.nav__links > a {
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+.nav__links > a:hover { color: var(--accent-text); }
+.nav__cta { color: var(--accent-ink) !important; }
+
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+.nav__toggle span {
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+}
+
+@media (max-width: 720px) {
+  .nav__toggle { display: flex; }
+  .nav__links {
+    position: absolute;
+    top: 4.5rem;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--bg-elev);
+    border-bottom: 1px solid var(--border);
+    padding: var(--sp-2) var(--sp-3) var(--sp-3);
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav__links--open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav__links > a { padding: 0.8rem 0; }
+  .nav__cta { margin-top: var(--sp-2); justify-content: center; }
+}

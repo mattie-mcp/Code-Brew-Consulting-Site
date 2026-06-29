@@ -1,0 +1,211 @@
+/* Résumé-request form — styled natively in the Studio system:
+   cream card stock, terracotta accent, rounded editorial geometry. */
+
+.rf {
+  margin-top: var(--sp-4);
+  max-width: 34rem;
+}
+
+.rf__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+
+@media (max-width: 540px) {
+  .rf__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rf__field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--sp-3);
+}
+
+.rf__label,
+.rf__legend {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.rf__input {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+  width: 100%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rf__input::placeholder {
+  color: var(--text-faint);
+}
+
+.rf__input:hover {
+  border-color: var(--accent);
+}
+
+.rf__input:focus {
+  outline: none;
+  border-color: var(--accent-text);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.rf__textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+.rf__input[aria-invalid="true"] {
+  border-color: #b3402a;
+}
+
+.rf__field-err {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: #9c3722;
+}
+
+/* Reason multi-select */
+.rf__fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 var(--sp-3);
+}
+
+.rf__hint {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.rf__reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.rf__reason {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.rf__reason:hover {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.rf__reason input {
+  accent-color: var(--accent-text);
+  margin: 0;
+}
+
+.rf__reason:has(input:checked) {
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+  background: var(--accent-dim);
+}
+
+/* Submit + reassurance */
+.rf__submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  margin-top: var(--sp-1);
+}
+
+.rf__reassure {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.rf__error {
+  margin: var(--sp-2) 0 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #e0b6a8;
+  border-radius: var(--radius-sm);
+  background: rgba(196, 90, 59, 0.08);
+  color: #9c3722;
+  font-size: 0.9rem;
+}
+
+.rf__alt {
+  margin-top: var(--sp-3);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Honeypot — kept out of view and out of the tab order, but not display:none
+   (some bots skip display:none fields). */
+.rf__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Success + returning-visitor note — warm, human, not a generic receipt. */
+.rf--note {
+  margin-top: var(--sp-4);
+  max-width: 34rem;
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.rf--note:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.rf__note-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--accent-text);
+  color: var(--accent-ink);
+  font-size: 1.1rem;
+  margin-bottom: var(--sp-2);
+}
+
+.rf__note-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.6rem;
+}
+
+.rf__note-body {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.rf__note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}

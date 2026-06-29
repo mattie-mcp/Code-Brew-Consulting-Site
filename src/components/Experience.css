@@ -1,0 +1,96 @@
+.xp {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.xp__item {
+  position: relative;
+  padding: 0 0 var(--sp-6) var(--sp-4);
+  border-left: 1px solid var(--border);
+}
+
+.xp__item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+/* accent dot riding the timeline */
+.xp__marker {
+  position: absolute;
+  top: 0.35rem;
+  left: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateX(-50%);
+  box-shadow: 0 0 0 4px var(--accent-dim);
+}
+
+.xp__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.xp__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.7rem;
+}
+
+.xp__role {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.xp__company {
+  font-size: 0.95rem;
+  color: var(--accent-text);
+}
+
+.xp__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.xp__location {
+  position: relative;
+  padding-left: 0.9rem;
+}
+
+.xp__location::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  transform: translateY(-50%);
+}
+
+.xp__note {
+  margin: 0.2rem 0 0;
+  max-width: 62ch;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+@media (min-width: 720px) {
+  .xp__item {
+    padding-left: var(--sp-6);
+  }
+}

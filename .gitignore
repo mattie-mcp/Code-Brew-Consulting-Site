@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+*.local
+.vite
+*.tsbuildinfo
+# Résumé PDFs carry PII (phone, location) and the gated copy must not be public.
+# Kept on disk for local CDK deploys; never committed to this public repo.
+resume_base.pdf
+infra/assets/resume/*.pdf

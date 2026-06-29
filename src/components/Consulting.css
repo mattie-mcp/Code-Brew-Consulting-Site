@@ -1,0 +1,48 @@
+.consulting__card {
+  position: relative;
+  max-width: 60ch;
+  padding: var(--sp-4);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* Subtle ◑ mark motif, bleeding off the corner. */
+.consulting__mark {
+  position: absolute;
+  top: -0.35em;
+  right: 0.1em;
+  font-size: clamp(5rem, 16vw, 8rem);
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.08;
+  pointer-events: none;
+  user-select: none;
+}
+
+.consulting__blurb {
+  position: relative;
+  margin: 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.consulting__ref {
+  position: relative;
+  margin: var(--sp-3) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.consulting__ref a {
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.18s ease;
+}
+
+.consulting__ref a:hover {
+  border-bottom-color: currentColor;
+}
