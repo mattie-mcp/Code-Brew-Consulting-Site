@@ -2,95 +2,129 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
-  border-bottom: 1px solid transparent;
-}
-.nav--scrolled {
-  /* Solid-ish fallback first; browsers with backdrop-filter get the glass. */
-  background: color-mix(in srgb, var(--bg) 94%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom-color: var(--border-soft);
-}
-@supports (backdrop-filter: blur(10px)) {
-  .nav--scrolled {
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
-  }
+  background: rgba(38, 30, 25, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(201, 138, 78, 0.25);
 }
 
 .nav__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 4.5rem;
+  gap: 16px;
+  padding: 14px clamp(20px, 5vw, 64px);
 }
 
 .nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+}
+
+.nav__logo {
+  height: 38px;
+  width: auto;
+  display: block;
+}
+
+.nav__lockup {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.nav__co {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.05rem;
-  color: var(--text);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.14em;
+  font-size: 14px;
+  color: var(--cream);
 }
-.nav__brand:hover { color: var(--text); }
-.nav__brand-mark {
-  color: var(--accent);
-  margin-right: 0.4rem;
+.nav__tagline {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin-top: 3px;
 }
 
 .nav__links {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: clamp(14px, 2.2vw, 30px);
 }
-.nav__links > a {
-  color: var(--text-muted);
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.005em;
+.nav__links a {
+  font-size: 14px;
+  color: #cbbbab;
+  text-decoration: none;
+  transition: color 0.18s ease;
 }
-.nav__links > a:hover { color: var(--accent-text); }
-.nav__cta { color: var(--accent-ink) !important; }
+.nav__links a:hover { color: #fff; }
 
+.nav__cta {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: var(--accent);
+  color: var(--accent-ink) !important;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.18s ease;
+}
+.nav__cta:hover { background: var(--accent-soft); }
+
+/* ---- Mobile toggle ---- */
 .nav__toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
+  width: 42px;
+  height: 38px;
+  padding: 0;
   background: none;
   border: 0;
   cursor: pointer;
-  padding: 0.5rem;
 }
 .nav__toggle span {
-  width: 22px;
+  display: block;
   height: 2px;
-  background: var(--text);
+  width: 22px;
+  margin: 0 auto;
+  background: var(--cream);
   border-radius: 2px;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 760px) {
   .nav__toggle { display: flex; }
   .nav__links {
     position: absolute;
-    top: 4.5rem;
     left: 0;
     right: 0;
+    top: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: 0;
-    background: var(--bg-elev);
-    border-bottom: 1px solid var(--border);
-    padding: var(--sp-2) var(--sp-3) var(--sp-3);
-    transform: translateY(-120%);
+    gap: 4px;
+    padding: 12px clamp(20px, 5vw, 64px) 20px;
+    background: rgba(38, 30, 25, 0.98);
+    border-bottom: 1px solid rgba(201, 138, 78, 0.25);
+    transform: translateY(-8px);
     opacity: 0;
     pointer-events: none;
-    transition: transform 0.25s ease, opacity 0.25s ease;
+    transition: opacity 0.18s ease, transform 0.18s ease;
   }
   .nav__links--open {
-    transform: translateY(0);
+    transform: none;
     opacity: 1;
     pointer-events: auto;
   }
-  .nav__links > a { padding: 0.8rem 0; }
-  .nav__cta { margin-top: var(--sp-2); justify-content: center; }
+  .nav__links a { padding: 10px 4px; font-size: 16px; }
+  .nav__cta {
+    margin-top: 6px;
+    text-align: center;
+    align-self: flex-start;
+  }
 }

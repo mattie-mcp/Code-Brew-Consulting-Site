@@ -73,5 +73,27 @@
 - **Takeaway for the demo:** the human set architecture, conventions, and the quality
   gate; the agent team executed the parallelizable build. Same shape as running a real org.
 
-<!-- Next entries: og-image, AWS deploy (bootstrap + cdk deploy), launch verification -->
+### Entry 7 — "Coffee house" design overhaul (design-handoff → rebuild)
+- **What changed:** a full visual-direction change from "Studio" (terracotta-on-cream,
+  Newsreader/Inter/JetBrains) to **"Coffee house"** (caramel + espresso, Spectral / DM
+  Sans / Caveat, mug logo + real headshot), driven by a high-fidelity HTML design handoff
+  (iteration 2). The handoff was treated as a visual/behavioral reference only — recreated
+  in the existing React/Vite component architecture, not copied (its `support.js` runtime
+  is not shipped).
+- **Structure:** Hero → About → Menu (services) → Competency map → Work (House Specials) →
+  Receipt (résumé accordion) → Contact. `Summary→About`, `Experience→Receipt`, new `Menu`;
+  dropped the standalone `Skills` list, the `Consulting` card, and the separate `Footer`
+  (folded into Contact).
+- **Owner gates:** keep the backend-wired **résumé-request form** (restyled, not replaced
+  by the prototype's simulated form); the competency map is the single skills view.
+- **Competency map:** re-laid-out to the prototype's coordinate-space model (cross root +
+  fanned children, 0–100 SVG connectors, transform-only zoom guarded by visibility +
+  reduced-motion) — keeps the evidence-tree content model.
+- **Verification:** `tsc -b` + Vite build clean; walked all 8 sections in-browser against
+  the prototype — drill-down/zoom/evidence, single-open receipt accordion, and the restyled
+  espresso contact form all confirmed.
+- **Follow-ups (noted):** regenerate `public/og-image.png` in the new palette; swap the
+  favicon for the mug; spot-check small-screen map node collisions.
+
+<!-- Next entries: og-image refresh, AWS deploy, launch verification -->
 

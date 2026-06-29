@@ -1,15 +1,18 @@
-/* Résumé-request form — styled natively in the Studio system:
-   cream card stock, terracotta accent, rounded editorial geometry. */
+/* Résumé-request form — restyled for the espresso "Let's talk shop" section:
+   dark translucent inputs, caramel submit, cream text. Logic unchanged. */
 
 .rf {
-  margin-top: var(--sp-4);
-  max-width: 34rem;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
 }
 
 .rf__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--sp-3);
+  gap: 14px;
 }
 
 @media (max-width: 540px) {
@@ -21,41 +24,40 @@
 .rf__field {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--sp-3);
 }
 
 .rf__label,
 .rf__legend {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--cream);
   margin-bottom: 0.5rem;
 }
 
 .rf__input {
   font-family: var(--font-sans);
-  font-size: 1rem;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
+  font-size: 15px;
+  color: var(--cream);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(230, 199, 154, 0.25);
   border-radius: var(--radius-sm);
-  padding: 0.7rem 0.9rem;
+  padding: 13px 16px;
   width: 100%;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .rf__input::placeholder {
-  color: var(--text-faint);
+  color: var(--cream-dim);
 }
 
 .rf__input:hover {
-  border-color: var(--accent);
+  border-color: rgba(230, 199, 154, 0.5);
 }
 
 .rf__input:focus {
   outline: none;
-  border-color: var(--accent-text);
-  box-shadow: 0 0 0 3px var(--accent-dim);
+  border-color: var(--gold-soft);
+  box-shadow: 0 0 0 3px rgba(201, 138, 78, 0.18);
 }
 
 .rf__textarea {
@@ -64,25 +66,25 @@
 }
 
 .rf__input[aria-invalid="true"] {
-  border-color: #b3402a;
+  border-color: #e08a6a;
 }
 
 .rf__field-err {
   margin-top: 0.4rem;
   font-size: 0.85rem;
-  color: #9c3722;
+  color: #f0b49a;
 }
 
 /* Reason multi-select */
 .rf__fieldset {
   border: 0;
   padding: 0;
-  margin: 0 0 var(--sp-3);
+  margin: 0;
 }
 
 .rf__hint {
   font-weight: 400;
-  color: var(--text-muted);
+  color: var(--cream-dim);
 }
 
 .rf__reasons {
@@ -96,29 +98,29 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 0.85rem;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(230, 199, 154, 0.25);
   border-radius: var(--radius-pill);
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.04);
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--cream-muted);
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
 .rf__reason:hover {
-  border-color: var(--accent);
-  color: var(--accent-text);
+  border-color: var(--gold-soft);
+  color: var(--cream);
 }
 
 .rf__reason input {
-  accent-color: var(--accent-text);
+  accent-color: var(--accent);
   margin: 0;
 }
 
 .rf__reason:has(input:checked) {
-  border-color: var(--accent-text);
-  color: var(--accent-text);
-  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--gold-soft);
+  background: rgba(201, 138, 78, 0.16);
 }
 
 /* Submit + reassurance */
@@ -132,25 +134,26 @@
 
 .rf__reassure {
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: var(--cream-dim);
   margin: 0;
 }
 
 .rf__error {
-  margin: var(--sp-2) 0 0;
+  margin: 0;
   padding: 0.7rem 0.9rem;
-  border: 1px solid #e0b6a8;
+  border: 1px solid rgba(224, 138, 106, 0.5);
   border-radius: var(--radius-sm);
-  background: rgba(196, 90, 59, 0.08);
-  color: #9c3722;
+  background: rgba(224, 138, 106, 0.12);
+  color: #f0b49a;
   font-size: 0.9rem;
 }
 
 .rf__alt {
-  margin-top: var(--sp-3);
+  margin: 0;
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--cream-muted);
 }
+.rf__alt a { color: var(--gold-soft); }
 
 /* Honeypot — kept out of view and out of the tab order, but not display:none
    (some bots skip display:none fields). */
@@ -162,14 +165,16 @@
   overflow: hidden;
 }
 
-/* Success + returning-visitor note — warm, human, not a generic receipt. */
+/* Success + returning-visitor note — the caramel "Order received" panel. */
 .rf--note {
-  margin-top: var(--sp-4);
-  max-width: 34rem;
-  padding: var(--sp-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px;
+  border: 1px solid rgba(201, 138, 78, 0.4);
+  border-radius: 14px;
+  background: rgba(201, 138, 78, 0.12);
 }
 
 .rf--note:focus-visible {
@@ -184,28 +189,39 @@
   width: 2.2rem;
   height: 2.2rem;
   border-radius: 50%;
-  background: var(--accent-text);
+  background: var(--accent);
   color: var(--accent-ink);
   font-size: 1.1rem;
   margin-bottom: var(--sp-2);
 }
 
 .rf__note-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.3rem, 3vw, 1.7rem);
-  letter-spacing: -0.01em;
-  margin: 0 0 0.6rem;
+  font-family: var(--font-script);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  color: var(--gold-soft);
+  margin: 0 0 0.4rem;
 }
 
 .rf__note-body {
-  color: var(--text-muted);
-  margin: 0;
+  color: var(--cream-muted);
+  margin: 0 auto;
+  max-width: 32em;
 }
 
 .rf__note-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--sp-2);
   margin-top: var(--sp-3);
+}
+
+/* Quiet action reads on the dark caramel panel. */
+.rf--note .btn--quiet {
+  color: var(--cream-muted);
+}
+.rf--note .btn--quiet:hover {
+  border-color: rgba(230, 199, 154, 0.4);
+  color: var(--cream);
 }

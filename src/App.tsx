@@ -1,29 +1,25 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import Summary from "./components/Summary";
-import Work from "./components/Work";
-import Experience from "./components/Experience";
+import About from "./components/About";
+import Menu from "./components/Menu";
 import CompetencyMap from "./components/CompetencyMap";
-import Skills from "./components/Skills";
-import Consulting from "./components/Consulting";
+import Work from "./components/Work";
+import Receipt from "./components/Receipt";
 import Contact from "./components/Contact";
-import Footer from "./components/Footer";
 
 export default function App() {
   return (
     <>
       <Nav />
-      <main id="top">
+      <main>
         <Hero />
-        <Summary />
-        <Work />
-        <Experience />
+        <About />
+        <Menu />
         <CompetencyMap />
-        <Skills />
-        <Consulting />
+        <Work />
+        <Receipt />
         <Contact />
       </main>
-      <Footer />
     </>
   );
 }

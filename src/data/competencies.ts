@@ -1,263 +1,244 @@
 /**
- * Interactive competency map — content tree.
- * Core competency → branch → leaf, where each leaf is a specific claim
- * backed by a real case study or role. Rendered by CompetencyMap.tsx.
- * This is a DRAFT tree for iterating on the interaction — edit freely.
+ * Competency map — content tree for the interactive drill-down node graph.
+ * Four core competencies → sub-areas → specific work, where each leaf carries
+ * an evidence card. Rendered by CompetencyMap.tsx.
+ *
+ * Node `code`s are explicit and stable (01 / 01.1 / 01.1.a) so the map can key
+ * navigation state on them. A node has EITHER `children` or `evidence` (leaf).
  */
 
-export interface Leaf {
+export interface Evidence {
+  desc: string;
+  /** Where "See the work" links — an in-page anchor (e.g. "#work"). */
+  link: string;
+  linkLabel: string;
+}
+
+export interface CompNode {
+  code: string;
   label: string;
-  /** One-line, evidence-backed claim shown in the leaf's evidence panel. */
-  claim: string;
-  /** Short source label, e.g. "Ellevest" or "OST". */
-  evidence: string;
-  /** Anchor the "see the work" link scrolls to (#work-… or #experience). */
-  href: string;
-  stack?: string[];
+  /** One-line descriptor shown under the four root cores. */
+  subtitle?: string;
+  children?: CompNode[];
+  evidence?: Evidence;
 }
 
-export interface Branch {
-  label: string;
-  leaves: Leaf[];
-}
-
-export interface Core {
-  label: string;
-  descriptor: string;
-  branches: Branch[];
-}
-
-/** Slug used as the DOM id on a case-study card so leaf links can scroll to it.
- *  Must stay in sync with the id applied in Work.tsx. */
-export function caseStudyAnchor(tag: string): string {
-  return (
-    "work-" +
-    tag
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-  );
-}
-
-const href = {
-  bpDirector: "#" + caseStudyAnchor("BiggerPockets · Director of Engineering"),
-  bpRag: "#" + caseStudyAnchor("BiggerPockets · Architect / IC"),
-  codeBrew: "#" + caseStudyAnchor("Code Brew Consulting · Principal Consultant"),
-  ellevest: "#" + caseStudyAnchor("Ellevest · Staff Engineer, Financial Systems"),
-  experience: "#experience",
-};
-
-export const competencyMap: Core[] = [
+export const competencyTree: CompNode[] = [
   {
+    code: "01",
     label: "Connected Products",
-    descriptor: "Devices, telemetry, and the cloud behind them.",
-    branches: [
+    subtitle: "Devices, firmware & the cloud behind them",
+    children: [
       {
+        code: "01.1",
         label: "IoT & device platforms",
-        leaves: [
+        children: [
           {
+            code: "01.1.a",
             label: "AWS IoT Core fleet",
-            claim:
-              "Built serverless AWS backends for connected-device fleets — IoT Core ingest feeding Lambda and managed data stores.",
-            evidence: "OST",
-            href: href.experience,
-            stack: ["AWS IoT Core", "Lambda", "DynamoDB"],
+            evidence: {
+              desc: "Built serverless device backends on AWS IoT Core, Lambda and DynamoDB powering a connected-product fleet.",
+              link: "#work",
+              linkLabel: "See the work (OST)",
+            },
           },
           {
+            code: "01.1.b",
             label: "Brownfield device migration",
-            claim:
-              "Migrated a large existing device fleet onto the new platform without disrupting the field.",
-            evidence: "OST",
-            href: href.experience,
+            evidence: {
+              desc: "Migrated hundreds of thousands of existing devices from Xively to AWS with zero downtime in the field.",
+              link: "#work",
+              linkLabel: "See the work (OST)",
+            },
           },
         ],
       },
       {
+        code: "01.2",
         label: "Connected-product delivery",
-        leaves: [
+        children: [
           {
-            label: "GraphQL + serverless at scale",
-            claim:
-              "Delivered connected-product features on serverless AWS with a GraphQL API layer, intern through senior over five years.",
-            evidence: "OST",
-            href: href.experience,
-            stack: ["GraphQL", "AWS", "Serverless"],
+            code: "01.2.a",
+            label: "Edge messaging",
+            evidence: {
+              desc: "Edge-device messaging and ingestion built on Azure IoT Hub, Event Hubs and Functions.",
+              link: "#work",
+              linkLabel: "See the work (OST)",
+            },
+          },
+          {
+            code: "01.2.b",
+            label: "Event-driven architecture",
+            evidence: {
+              desc: "Designed event-driven, serverless backends and presented on the pattern at a regional developer event.",
+              link: "#work",
+              linkLabel: "See the work (OST)",
+            },
           },
         ],
       },
     ],
   },
   {
+    code: "02",
     label: "Digital Products",
-    descriptor: "Shipping software people actually use.",
-    branches: [
+    subtitle: "Full-stack web, mobile & fintech",
+    children: [
       {
+        code: "02.1",
         label: "Full-stack delivery",
-        leaves: [
+        children: [
           {
-            label: ".NET plant-floor platform",
-            claim:
-              "Shipped a custom .NET Core / Razor Pages plant-floor app end-to-end for a regional manufacturer.",
-            evidence: "Code Brew",
-            href: href.codeBrew,
-            stack: [".NET Core", "Razor Pages"],
+            code: "02.1.a",
+            label: "Client advice product",
+            evidence: {
+              desc: "Led a client-facing advice product end-to-end across React Native, React and Ruby on Rails.",
+              link: "#work",
+              linkLabel: "See the work (Ellevest)",
+            },
           },
           {
-            label: "React / Rails client products",
-            claim:
-              "Built and maintained client-facing investment products on React and Ruby on Rails.",
-            evidence: "Ellevest",
-            href: href.ellevest,
-            stack: ["React", "Ruby on Rails"],
+            code: "02.1.b",
+            label: "Consumer AI search",
+            evidence: {
+              desc: "Pinecone RAG with GPT-4o synthesis, SSE-streamed across articles and forums — shipped to production.",
+              link: "#work",
+              linkLabel: "See the work (BiggerPockets)",
+            },
           },
         ],
       },
       {
-        label: "AI engineering",
-        leaves: [
+        code: "02.2",
+        label: "Fintech systems",
+        children: [
           {
-            label: "Production RAG search",
-            claim:
-              "Shipped a production RAG search over blog and forum content — Pinecone, OpenAI embeddings, GPT-4o synthesis, SSE-streamed.",
-            evidence: "BiggerPockets",
-            href: href.bpRag,
-            stack: ["Pinecone", "GPT-4o", "RAG", "SSE"],
+            code: "02.2.a",
+            label: "Investment platform",
+            evidence: {
+              desc: "Lead engineer on a highly-available, recoverable platform processing financial transactions and vendor integrations.",
+              link: "#work",
+              linkLabel: "See the work (Ellevest)",
+            },
           },
           {
-            label: "AI-driven SDLC",
-            claim:
-              "Standardized the org on Claude Code with in-repo AI standards, custom skills, and MCPs — engineers building workflows, not just consuming a tool.",
-            evidence: "BiggerPockets",
-            href: href.bpDirector,
-            stack: ["Claude Code", "MCPs", "AI standards"],
+            code: "02.2.b",
+            label: "Design system & CMS",
+            evidence: {
+              desc: "Built a reusable React component library integrated with Contentful so editors compose accessible pages.",
+              link: "#work",
+              linkLabel: "See the work (BiggerPockets)",
+            },
           },
         ],
       },
     ],
   },
   {
+    code: "03",
     label: "Infrastructure",
-    descriptor: "High-availability systems and the rails they run on.",
-    branches: [
+    subtitle: "Cloud, reliability & integrations",
+    children: [
       {
-        label: "High-availability financial systems",
-        leaves: [
+        code: "03.1",
+        label: "Cloud & reliability",
+        children: [
           {
-            label: "Fault-tolerant ACH & transfers",
-            claim:
-              "Processed ACH and investment-transfer transactions on a fault-tolerant, job-based financial platform built to recover cleanly.",
-            evidence: "Ellevest",
-            href: href.ellevest,
-            stack: ["Ruby on Rails", "Sidekiq"],
+            code: "03.1.a",
+            label: "Observability & cost",
+            evidence: {
+              desc: "Improved observability and transaction processing — cutting error rates and both compute and monitoring spend.",
+              link: "#work",
+              linkLabel: "See the work (Ellevest)",
+            },
           },
           {
-            label: "High-throughput job orchestration",
-            claim:
-              "Built high-throughput, fault-tolerant Sidekiq job systems for transaction processing at scale.",
-            evidence: "Ellevest",
-            href: href.ellevest,
-            stack: ["Sidekiq", "Job orchestration"],
+            code: "03.1.b",
+            label: "Fault-tolerant jobs",
+            evidence: {
+              desc: "Built high-throughput, fault-tolerant Sidekiq systems for concurrent, parallel job processing.",
+              link: "#work",
+              linkLabel: "See the work (Ellevest)",
+            },
           },
         ],
       },
       {
-        label: "Observability & cost",
-        leaves: [
+        code: "03.2",
+        label: "Systems integration",
+        children: [
           {
-            label: "Instrumentation + spend tuning",
-            claim:
-              "Enhanced observability with Datadog while lowering compute and monitoring spend and removing complexity that slowed releases.",
-            evidence: "Ellevest",
-            href: href.ellevest,
-            stack: ["Datadog"],
-          },
-        ],
-      },
-      {
-        label: "Secure cloud delivery",
-        leaves: [
-          {
-            label: "Azure AD + CI/CD",
-            claim:
-              "Secured delivery with Azure AD and shipped through Azure DevOps CI/CD with a full automated test suite.",
-            evidence: "Code Brew",
-            href: href.codeBrew,
-            stack: ["Azure AD", "Azure DevOps"],
+            code: "03.2.a",
+            label: "ERP integration",
+            evidence: {
+              desc: "Custom .NET Core application integrated with Dynamics 365 Business Central via API extensions.",
+              link: "#work",
+              linkLabel: "See the work (Code Brew)",
+            },
           },
           {
-            label: "Dynamics 365 BC integration",
-            claim:
-              "Integrated with Microsoft Dynamics 365 Business Central via API extensions — architected stateless against the ERP, no app-side database.",
-            evidence: "Code Brew",
-            href: href.codeBrew,
-            stack: ["Dynamics 365 BC", "API extensions"],
-          },
-        ],
-      },
-      {
-        label: "Operational safety",
-        leaves: [
-          {
-            label: "Production-halt safety system",
-            claim:
-              "Built a preventative system that freezes production on ERP-side exceptions until a supervisor overrides — each averted batch protects thousands in inventory.",
-            evidence: "Code Brew",
-            href: href.codeBrew,
+            code: "03.2.b",
+            label: "CI/CD & IaC",
+            evidence: {
+              desc: "Azure DevOps pipelines with full test suites; infrastructure managed as code via CloudFormation and ARM.",
+              link: "#work",
+              linkLabel: "See the work (Code Brew)",
+            },
           },
         ],
       },
     ],
   },
   {
+    code: "04",
     label: "Team Building",
-    descriptor: "Building the team as deliberately as the software.",
-    branches: [
+    subtitle: "Leading & growing engineering teams",
+    children: [
       {
-        label: "Org leadership",
-        leaves: [
+        code: "04.1",
+        label: "Leading teams",
+        children: [
           {
-            label: "10-person org turnaround",
-            claim:
-              "Recruited as the first-ever head of engineering; led a 10-person org (2 EMs, ~8 ICs) through a cultural and technical turnaround as a player-coach.",
-            evidence: "BiggerPockets",
-            href: href.bpDirector,
+            code: "04.1.a",
+            label: "AI adoption",
+            evidence: {
+              desc: "Drove engineering AI adoption from resistant to ~80% active use in four months via peer-led workshops and in-repo standards.",
+              link: "#work",
+              linkLabel: "See the work (BiggerPockets)",
+            },
           },
           {
-            label: "Rebuilt product–eng trust",
-            claim:
-              "Restored Product's trust in engineering quality and delivery timelines.",
-            evidence: "BiggerPockets",
-            href: href.bpDirector,
+            code: "04.1.b",
+            label: "Career ladder",
+            evidence: {
+              desc: "Designed an engineering career ladder — coherent roles, right-sized bands and explicit expectations.",
+              link: "#work",
+              linkLabel: "See the work (BiggerPockets)",
+            },
           },
         ],
       },
       {
-        label: "Growing engineers",
-        leaves: [
-          {
-            label: "Career-ladder design",
-            claim: "Designed a career ladder that made growth and expectations legible.",
-            evidence: "BiggerPockets",
-            href: href.bpDirector,
-          },
-          {
-            label: "Coaching EMs",
-            claim:
-              "Coached the EMs to manage strategically rather than distribute tickets.",
-            evidence: "BiggerPockets",
-            href: href.bpDirector,
-          },
-        ],
-      },
-      {
+        code: "04.2",
         label: "Player-coach delivery",
-        leaves: [
+        children: [
           {
-            label: "~80% AI-dev adoption",
-            claim:
-              "Took the engineering team from resistant to roughly 80% active AI-driven development in four months — while still shipping code myself.",
-            evidence: "BiggerPockets",
-            href: href.bpDirector,
+            code: "04.2.a",
+            label: "SDLC redesign",
+            evidence: {
+              desc: "Shifted from top-down tickets to engineer-owned, end-to-end initiatives with AI-augmented execution.",
+              link: "#work",
+              linkLabel: "See the work (BiggerPockets)",
+            },
+          },
+          {
+            code: "04.2.b",
+            label: "Product–eng trust",
+            evidence: {
+              desc: "Rebuilt the product–engineering relationship: introduced estimates and restored trust in quality and timelines.",
+              link: "#work",
+              linkLabel: "See the work (BiggerPockets)",
+            },
           },
         ],
       },
