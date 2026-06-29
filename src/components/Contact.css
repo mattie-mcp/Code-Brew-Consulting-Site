@@ -1,75 +1,47 @@
-.contact {
-  position: relative;
-  overflow: hidden;
-}
-
-/* warm radial glow anchoring the close of the page (mirrors the hero warmth) */
-.contact::before {
-  content: "";
-  position: absolute;
-  bottom: -30%;
-  left: -10%;
-  width: 55%;
-  height: 140%;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(
-    closest-side,
-    color-mix(in srgb, var(--accent) 14%, transparent),
-    transparent 70%
-  );
-}
-
 .contact__inner {
-  position: relative;
-  z-index: 1;
-  max-width: 40rem;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 40px);
 }
 
-.contact__status {
-  margin-bottom: var(--sp-4);
+.contact__eyebrow {
+  font-size: 30px;
 }
 
-.contact__intro {
-  max-width: 34rem;
-  color: var(--text-muted);
-  font-size: 1.05rem;
-  margin-bottom: var(--sp-2);
-}
-
-/* large, unmistakable email CTA */
-.contact__cta {
+.contact__mailto {
   display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.15rem;
-  padding: var(--sp-2) var(--sp-3);
-  margin-bottom: var(--sp-4);
+  margin: 0 auto;
 }
 
-.contact__cta-label {
-  font-family: var(--font-display);
-  font-size: clamp(1.2rem, 3vw, 1.6rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.contact__cta-addr {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  opacity: 0.85;
-}
-
+/* ---- Outlined pill links ---- */
 .contact__links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.7rem;
-  list-style: none;
-  margin: var(--sp-6) 0 0;
-  padding: 0;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 44px;
 }
-
-.contact__links li {
+.contact__link {
   display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(230, 199, 154, 0.25);
+  color: var(--gold-soft);
+  font-size: 14px;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+.contact__link:hover {
+  border-color: var(--gold-soft);
+  color: var(--gold-soft);
 }
 
+.contact__footer {
+  text-align: center;
+  margin-top: 50px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(230, 199, 154, 0.12);
+  font-size: 13px;
+  color: #8a7d6e;
+}

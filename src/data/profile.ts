@@ -1,13 +1,12 @@
 /**
- * Single source of content for the site, synthesized from resume_base.pdf.
- * See docs/content.md. Components render from this — no copy hard-coded in JSX.
+ * Single source of content for the site. Components render from this —
+ * no copy hard-coded in JSX. See docs/content.md and docs/design-system.md.
  */
 
 export const profile = {
   name: "Mattie Phillips",
   title: "Engineering Manager · Staff Engineer",
   recentRole: "Most recently Director of Engineering · BiggerPockets",
-  tagline: "Technical Engineering Leader",
   location: "Grand Rapids, MI",
   remote: "Open to remote",
   email: "mphillips1695@gmail.com",
@@ -15,12 +14,175 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/mattiephillips/",
   site: "https://codebrewconsulting.com",
   statusOpen: "Open to technical EM / Staff Engineer roles",
+} as const;
 
-  valueProp:
-    "I build engineering teams as deliberately as I build software — and I never leave the code.",
+/** Hero — the espresso "Today's Brew" masthead. */
+export const hero = {
+  eyebrow: "Today's Brew —",
+  nameLine: "Mattie Phillips,",
+  titleLine: "player-coach engineer.",
+  // `firm` is bolded inline; `blurb` follows it.
+  firm: "Code Brew Consulting",
+  blurb:
+    " is my independent software practice — senior, hands-on help with custom software, connected products, and engineering leadership. Nine years in, I still lead teams without ever leaving the code.",
+  primaryCta: { label: "See the menu", href: "#menu" },
+  secondaryCta: { label: "Read my resume", href: "#career" },
+} as const;
 
-  summary:
-    "I'm a staff engineer turned engineering manager with nine years of full-stack delivery across digital and connected products. Most recently I was recruited as BiggerPockets' first head of engineering, where I led a 10-person org through a cultural and technical transformation as a player-coach — taking the team from resistant to roughly 80% active AI-driven development in four months, modernizing the stack, and rebuilding the product–engineering relationship. Before that I set architecture direction across the org as a Staff Engineer at Ellevest. I'm looking for a technical EM role where both dimensions matter: the team and the code.",
+/** About — "Pull up a chair". */
+export const about = {
+  eyebrow: "— Pull up a chair —",
+  title: "A people-first engineer who likes the hard problems.",
+  bio:
+    "I'm Mattie Phillips — a software engineering leader with nine years of full-stack delivery across fintech, connected products, and digital platforms. I went from staff engineer to director of engineering, but I never left the code: I lead teams as a player-coach, set architecture direction, and care just as much about the engineers writing the software as the software itself. Code Brew Consulting is the practice I run when I'm building for clients directly.",
+  pills: [
+    "Player-coach leadership",
+    "Fintech",
+    "Connected products & IoT",
+    "Digital product",
+    "AI engineering",
+  ],
+} as const;
+
+/** The Menu — consulting services. */
+export interface Service {
+  name: string;
+  tag: "Project" | "Advisory";
+  desc: string;
+}
+
+export const services: Service[] = [
+  {
+    name: "Custom Software & Platforms",
+    tag: "Project",
+    desc: "Full-stack web and backend builds — like a custom .NET Core platform that replaced costly licensed software end to end.",
+  },
+  {
+    name: "Connected Products & IoT",
+    tag: "Project",
+    desc: "End-to-end IoT build-outs — edge devices, messaging, and the cloud backends that tie hardware and software together.",
+  },
+  {
+    name: "ERP & Systems Integration",
+    tag: "Project",
+    desc: "Clean, secure API integrations with platforms like Dynamics 365 Business Central — stateless and built to last.",
+  },
+  {
+    name: "Fractional Leadership & Advisory",
+    tag: "Advisory",
+    desc: "Staff/principal-level technical direction, architecture reviews, and player-coach engineering leadership for your team.",
+  },
+];
+
+/** Selected Work — "House Specials" project cards. */
+export interface Project {
+  name: string;
+  category: string;
+  desc: string;
+  stack: string[];
+}
+
+export const projects: Project[] = [
+  {
+    name: "Consumer AI Search",
+    category: "AI · DIGITAL PRODUCT",
+    desc: "Pinecone-backed RAG with OpenAI embeddings and GPT-4o synthesis, SSE-streamed across articles and forum content. Shipped to production at BiggerPockets.",
+    stack: ["Pinecone", "OpenAI", "GPT-4o"],
+  },
+  {
+    name: "Engineering Team Transformation",
+    category: "ENGINEERING LEADERSHIP",
+    desc: "Led a 10-person org through a cultural and technical reset at BiggerPockets — drove AI adoption from resistant to ~80%, modernized the stack, designed a career ladder, and rebuilt the product–engineering relationship.",
+    stack: ["Leadership", "AI adoption", "Career ladder"],
+  },
+  {
+    name: "Shipping & Receiving Platform",
+    category: "CUSTOM SOFTWARE",
+    desc: "A custom .NET Core app integrated with Dynamics 365 Business Central that replaced licensed software and added a real-time production-halt safety system.",
+    stack: [".NET Core", "Dynamics 365", "Azure AD"],
+  },
+  {
+    name: "End-to-End IoT Build-Outs",
+    category: "CONNECTED PRODUCTS",
+    desc: "Designed and shipped connected-product systems from edge devices to cloud — serverless backends, device messaging, and a zero-downtime migration of hundreds of thousands of IoT devices to AWS.",
+    stack: ["AWS IoT", "Azure IoT Hub", "Serverless"],
+  },
+  {
+    name: "Investment Platform",
+    category: "FINTECH",
+    desc: "Lead engineer on a highly-available, recoverable system processing financial transactions and vendor integrations, with fault-tolerant Sidekiq jobs.",
+    stack: ["Ruby on Rails", "Sidekiq", "AWS"],
+  },
+];
+
+/** The Receipt — résumé, itemized. */
+export interface Role {
+  title: string;
+  company: string;
+  dates: string;
+  bullets: string[];
+  stack: string[];
+}
+
+export const roles: Role[] = [
+  {
+    title: "Director of Engineering",
+    company: "BiggerPockets · Remote",
+    dates: "Dec 2025 – Jun 2026",
+    bullets: [
+      "First head of engineering for a 10-person org — led as a player-coach while still contributing as a staff engineer.",
+      "Drove AI adoption from resistant to ~80% in four months and launched a consumer AI search (Pinecone RAG, GPT-4o, SSE streaming).",
+      "Rebuilt the product–engineering relationship, designed a career ladder, and led a Rails→React modernization.",
+    ],
+    stack: ["Leadership", "React", "Claude Code", "RAG"],
+  },
+  {
+    title: "Founder & Principal Consultant",
+    company: "Code Brew Consulting · Grand Rapids, MI",
+    dates: "Apr 2025 – Dec 2025",
+    bullets: [
+      "Ran the full engagement lifecycle — business development, scoping, pricing — alongside hands-on staff-level delivery.",
+      "Built a custom .NET Core shipping & receiving platform integrated with Dynamics 365 Business Central, replacing costly licensed software.",
+      "Designed a preventative production-halt safety system protecting thousands in inventory per averted batch.",
+    ],
+    stack: [".NET Core", "Dynamics 365", "Azure", "Azure DevOps"],
+  },
+  {
+    title: "Staff Engineer, Financial Systems",
+    company: "Ellevest · Remote (NYC)",
+    dates: "Jan 2022 – Apr 2025",
+    bullets: [
+      "Lead engineer on a fintech investment platform handling vendor integrations and financial transaction processing.",
+      "Set architecture direction and system patterns adopted across the engineering org.",
+      "Promoted from Technical Lead on the client-facing Advice team after leading a delivery and quality reset.",
+    ],
+    stack: ["Ruby on Rails", "React Native", "Sidekiq", "Fintech"],
+  },
+  {
+    title: "Senior Connected Products Consultant",
+    company: "Open Systems Technologies (OST) · Grand Rapids, MI",
+    dates: "2016 – Jan 2022",
+    bullets: [
+      "Progressed from intern to senior consultant, leading technical execution on IoT and connected-products engagements.",
+      "Migrated hundreds of thousands of brownfield IoT devices from Xively to AWS with zero downtime.",
+      "Built serverless backends (AWS Lambda, IoT Core, DynamoDB) and edge messaging on Azure IoT Hub.",
+    ],
+    stack: ["AWS IoT", "Azure IoT", "GraphQL", "Serverless"],
+  },
+  {
+    title: "Software Development Intern",
+    company: "American Express · Phoenix, AZ",
+    dates: "Summer 2017",
+    bullets: [
+      "Built Java microservices and a Kafka event-processing debug tool for a custom cloud platform team.",
+    ],
+    stack: ["Java", "Kafka"],
+  },
+];
+
+export const resume = {
+  education: "B.S. Computer Science · Grand Valley State University · 2017",
+  totalYears: "9 years",
 } as const;
 
 /**
@@ -46,7 +208,7 @@ export const resumeForm = {
   reasonsLegend: "Why are you reaching out?",
   reasonsHint: "Optional — pick any that fit.",
 
-  submitLabel: "Send me the résumé",
+  submitLabel: "Send it over →",
   submitBusyLabel: "Sending…",
 
   reasons: [
@@ -58,8 +220,8 @@ export const resumeForm = {
     { value: "other", label: "Other" },
   ],
 
-  // Success state — warm and human, not a generic "thanks, submitted."
-  successTitle: "It's on its way.",
+  // Success state — warm and human, on-theme with the coffee house.
+  successTitle: "Order received! ☕",
   successBody:
     "Check your inbox — the résumé should land in a moment, with a quick note from me. If it's hiding, peek in spam, or just reply to that email and it comes straight to me.",
 
@@ -74,145 +236,3 @@ export const resumeForm = {
   errorGeneric:
     "Something went sideways sending that. Mind trying again? Or email me directly and I'll reply with the résumé.",
 } as const;
-
-export interface CaseStudy {
-  title: string;
-  tag: string;
-  context: string;
-  did: string;
-  outcome: string;
-  stack: string[];
-}
-
-export const caseStudies: CaseStudy[] = [
-  {
-    title: "Reviving an engineering org as a player-coach",
-    tag: "BiggerPockets · Director of Engineering",
-    context:
-      "Recruited as the first-ever head of engineering for a ~10-person org (2 EMs, ~8 ICs) facing low engagement, a legacy stack, and a strained product relationship.",
-    did:
-      "Led as a player-coach — standardized the org on Claude Code and redesigned the SDLC to encourage AI-driven development, getting engineers contributing shared AI workflows (in-repo standards, skills, MCPs) rather than just consuming a tool. Designed a career ladder and coached the EMs to manage strategically rather than distribute tickets.",
-    outcome:
-      "Took the engineering team from resistant to ~80% active adoption of AI-driven development in four months; throughput gains by month three forced CI/test-spend tuning; restored Product's trust in engineering quality and timelines.",
-    stack: ["Leadership", "SDLC design", "Career ladders", "Claude Code"],
-  },
-  {
-    title: "Custom plant-floor shipping & receiving platform",
-    tag: "Code Brew Consulting · Principal Consultant",
-    context:
-      "A regional food manufacturer was paying recurring license fees for an off-the-shelf shipping/receiving product. Engaged independently via Software InsITe.",
-    did:
-      "Replaced it with a custom .NET Core / Razor Pages app on the plant floor, integrated with Microsoft Dynamics 365 Business Central via API extensions. Architected stateless against Business Central (no app-side DB), secured with Azure AD, shipped with Azure DevOps CI/CD and a full test suite. Built a preventative production-halt safety system that freezes production on ERP-side exceptions until a supervisor overrides.",
-    outcome:
-      "Eliminated recurring license fees and gave the client full control of their workflow; each averted batch protects thousands in inventory.",
-    stack: [".NET Core", "Dynamics 365 BC", "Azure AD", "Azure DevOps"],
-  },
-  {
-    title: "High-availability investment platform",
-    tag: "Ellevest · Staff Engineer, Financial Systems",
-    context:
-      "A recoverable system handling vendor integrations, financial transaction processing, and client-facing products.",
-    did:
-      "Lead engineer; set architecture direction and patterns adopted across the org. Enhanced observability and transaction processing; built high-throughput, fault-tolerant Sidekiq systems.",
-    outcome:
-      "Drastically reduced error rates in the financial transaction system while lowering compute and monitoring spend and removing complexity that had slowed releases.",
-    stack: ["Ruby on Rails", "Sidekiq", "Datadog"],
-  },
-  {
-    title: "Consumer-facing AI search (RAG), in production",
-    tag: "BiggerPockets · Architect / IC",
-    context:
-      "Launch an AI search experience over the company's blog articles and forum content.",
-    did:
-      "Set scope, steered technical direction with the implementation partner, and gated quality through code review. Pinecone-backed RAG with OpenAI embeddings and GPT-4o synthesis, SSE-streamed to the client.",
-    outcome:
-      "Shipped to production, serving AI-synthesized answers over the company's blog and forum corpus.",
-    stack: ["Pinecone", "OpenAI", "GPT-4o", "RAG", "SSE", "React"],
-  },
-];
-
-export interface Role {
-  role: string;
-  company: string;
-  dates: string;
-  location: string;
-  note: string;
-}
-
-export const experience: Role[] = [
-  {
-    role: "Director of Engineering",
-    company: "BiggerPockets",
-    dates: "Dec 2025 – Jun 2026",
-    location: "Remote",
-    note: "First head of engineering; 10-person org (2 EMs, ~8 ICs); player-coach through a cultural and technical transformation.",
-  },
-  {
-    role: "Principal Consultant",
-    company: "Code Brew Consulting",
-    dates: "Apr 2025 – Dec 2025",
-    location: "Grand Rapids, MI",
-    note: "Independent delivery at staff level — an ERP-integrated plant-floor platform for a regional manufacturer.",
-  },
-  {
-    role: "Staff Engineer, Financial Systems",
-    company: "Ellevest",
-    dates: "Jan 2022 – Apr 2025",
-    location: "Remote (NYC)",
-    note: "Promoted from Technical Lead on Advice. Set org-wide architecture direction on the investment platform.",
-  },
-  {
-    role: "Senior Connected Products Consultant",
-    company: "Open Systems Technologies (OST)",
-    dates: "2016 – Jan 2022",
-    location: "Grand Rapids, MI",
-    note: "Intern → Senior on IoT and connected-products engagements; serverless AWS, GraphQL, large brownfield device migration.",
-  },
-  {
-    role: "Software Development Intern",
-    company: "American Express",
-    dates: "Summer 2017",
-    location: "Phoenix, AZ",
-    note: "Built Java microservices and Kafka tooling for a custom cloud platform team.",
-  },
-];
-
-export interface SkillGroup {
-  label: string;
-  items: string[];
-}
-
-export const skills: SkillGroup[] = [
-  {
-    label: "Languages",
-    items: ["Ruby (Rails)", "TypeScript / JavaScript", "React / React Native", "Node.js", "Python", ".NET (C#)", "SQL"],
-  },
-  {
-    label: "Cloud & Infra",
-    items: ["AWS (Lambda, DynamoDB, ECS, API Gateway, IoT Core, RDS)", "Azure", "Docker", "CloudFormation / CDK", "GitHub Actions", "Azure DevOps"],
-  },
-  {
-    label: "AI Engineering",
-    items: ["Claude Code (skills, MCPs, hooks)", "Figma MCP design-to-code", "RAG / embeddings", "Agent-driven workflows", "In-repo AI standards"],
-  },
-  {
-    label: "Architecture & Ops",
-    items: ["Event-driven systems", "Microservices", "REST / GraphQL", "Datadog / Sentry / PagerDuty", "Job orchestration"],
-  },
-  {
-    label: "Leadership",
-    items: ["Engineering management", "Career-ladder design", "EM coaching", "Technical strategy", "Player-coach delivery", "SAFe 4"],
-  },
-];
-
-export const consulting = {
-  blurb:
-    "Code Brew Consulting is my LLC — the vehicle for independent, staff-level delivery. Through it I've shipped production systems end-to-end for real clients, owning scope, architecture, security, and CI/CD without a net. It's how I stay close to the work and prove I can deliver outside any single company's scaffolding.",
-};
-
-export const education = {
-  degree: "B.S. Computer Science",
-  school: "Grand Valley State University",
-  dates: "2013 – 2017",
-  detail: "Frederick Meijer Honors College. Researched DDoS mitigation strategies of top websites using DNS crawling techniques.",
-};
