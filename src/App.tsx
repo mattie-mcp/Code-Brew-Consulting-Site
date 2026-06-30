@@ -4,7 +4,6 @@ import About from "./components/About";
 import Menu from "./components/Menu";
 import CompetencyMap from "./components/CompetencyMap";
 import Work from "./components/Work";
-import Receipt from "./components/Receipt";
 import Contact from "./components/Contact";
 
 export default function App() {
@@ -17,7 +16,6 @@ export default function App() {
         <Menu />
         <CompetencyMap />
         <Work />
-        <Receipt />
         <Contact />
       </main>
     </>

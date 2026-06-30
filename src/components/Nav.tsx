@@ -7,7 +7,6 @@ const LINKS = [
   { href: "#menu", label: "Menu" },
   { href: "#skills", label: "Competencies" },
   { href: "#work", label: "Work" },
-  { href: "#career", label: "Resume" },
 ];
 
 export default function Nav() {

@@ -22,7 +22,7 @@ export const hero = {
   blurb:
     " is my independent software practice - senior, hands-on help with custom software, connected products, and engineering leadership. Nine years in, I still lead teams without ever leaving the code.",
   primaryCta: { label: "See the menu", href: "#menu" },
-  secondaryCta: { label: "Read my resume", href: "#career" },
+  secondaryCta: { label: "Request my resume", href: "#contact" },
 } as const;
 
 /** About - "Pull up a chair". */
@@ -56,7 +56,7 @@ export const services: Service[] = [
   {
     name: "Team Practices",
     tag: "Advisory",
-    desc: "Clean, secure API integrations with platforms like Dynamics 365 Business Central - stateless and built to last.",
+    desc: "Player-coach engineering leadership - architecture direction, code review, career ladders, and the delivery habits that turn a group of engineers into a high-performing team.",
   },
   {
     name: "Mobile Builds",
@@ -66,7 +66,7 @@ export const services: Service[] = [
   {
     name: "AI Adoption",
     tag: "Advisory",
-    desc: "Guidance and hands-on help for teams adopting AI - from RAG to LLMs to generative AI, with a focus on practical, production-ready solutions.",
+    desc: "Help getting your team using AI for real - from rolling out coding assistants and AI workflows to shipping production LLM and RAG features.",
   },
 
   {
@@ -116,76 +116,6 @@ export const projects: Project[] = [
     stack: ["Ruby on Rails", "Sidekiq", "AWS"],
   },
 ];
-
-/** The Receipt - resume, itemized. */
-export interface Role {
-  title: string;
-  company: string;
-  dates: string;
-  bullets: string[];
-  stack: string[];
-}
-
-export const roles: Role[] = [
-  {
-    title: "Director of Engineering",
-    company: "BiggerPockets · Remote",
-    dates: "Dec 2025 – Jun 2026",
-    bullets: [
-      "First head of engineering for a 10-person org - led as a player-coach while still contributing as a staff engineer.",
-      "Drove AI adoption from resistant to ~80% in four months and launched a consumer AI search (Pinecone RAG, GPT-4o, SSE streaming).",
-      "Rebuilt the product–engineering relationship, designed a career ladder, and led a Rails→React modernization.",
-    ],
-    stack: ["Leadership", "React", "Claude Code", "RAG"],
-  },
-  {
-    title: "Founder & Principal Consultant",
-    company: "Code Brew Consulting · Grand Rapids, MI",
-    dates: "Apr 2025 – Dec 2025",
-    bullets: [
-      "Ran the full engagement lifecycle - business development, scoping, pricing - alongside hands-on staff-level delivery.",
-      "Built a custom .NET Core shipping & receiving platform integrated with Dynamics 365 Business Central, replacing costly licensed software.",
-      "Designed a preventative production-halt safety system protecting thousands in inventory per averted batch.",
-    ],
-    stack: [".NET Core", "Dynamics 365", "Azure", "Azure DevOps"],
-  },
-  {
-    title: "Staff Engineer, Financial Systems",
-    company: "Ellevest · Remote (NYC)",
-    dates: "Jan 2022 – Apr 2025",
-    bullets: [
-      "Lead engineer on a fintech investment platform handling vendor integrations and financial transaction processing.",
-      "Set architecture direction and system patterns adopted across the engineering org.",
-      "Promoted from Technical Lead on the client-facing Advice team after leading a delivery and quality reset.",
-    ],
-    stack: ["Ruby on Rails", "React Native", "Sidekiq", "Fintech"],
-  },
-  {
-    title: "Senior Connected Products Consultant",
-    company: "Open Systems Technologies (OST) · Grand Rapids, MI",
-    dates: "2016 – Jan 2022",
-    bullets: [
-      "Progressed from intern to senior consultant, leading technical execution on IoT and connected-products engagements.",
-      "Migrated hundreds of thousands of brownfield IoT devices from Xively to AWS with zero downtime.",
-      "Built serverless backends (AWS Lambda, IoT Core, DynamoDB) and edge messaging on Azure IoT Hub.",
-    ],
-    stack: ["AWS IoT", "Azure IoT", "GraphQL", "Serverless"],
-  },
-  {
-    title: "Software Development Intern",
-    company: "American Express · Phoenix, AZ",
-    dates: "Summer 2017",
-    bullets: [
-      "Built Java microservices and a Kafka event-processing debug tool for a custom cloud platform team.",
-    ],
-    stack: ["Java", "Kafka"],
-  },
-];
-
-export const resume = {
-  education: "B.S. Computer Science · Grand Valley State University · 2017",
-  totalYears: "9 years",
-} as const;
 
 /**
  * Copy + options for the resume-request / contact form. Voiced to read as a
