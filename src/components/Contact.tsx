@@ -48,6 +48,14 @@ export default function Contact() {
             >
               GitHub ↗
             </a>
+            <a
+              className="contact__link"
+              href={profile.repo}
+              target="_blank"
+              rel="noopener"
+            >
+              Site source ↗
+            </a>
           </div>
 
           <p className="contact__footer">

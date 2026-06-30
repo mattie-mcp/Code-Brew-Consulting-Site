@@ -1,50 +1,46 @@
 /**
- * Single source of content for the site. Components render from this —
+ * Single source of content for the site. Components render from this -
  * no copy hard-coded in JSX. See docs/content.md and docs/design-system.md.
  */
 
 export const profile = {
   name: "Mattie Phillips",
-  title: "Engineering Manager · Staff Engineer",
-  recentRole: "Most recently Director of Engineering · BiggerPockets",
   location: "Grand Rapids, MI",
-  remote: "Open to remote",
   email: "mphillips1695@gmail.com",
   github: "https://github.com/mattie-mcp",
+  repo: "https://github.com/mattie-mcp/Code-Brew-Consulting-Site",
   linkedin: "https://www.linkedin.com/in/mattiephillips/",
-  site: "https://codebrewconsulting.com",
-  statusOpen: "Open to technical EM / Staff Engineer roles",
 } as const;
 
-/** Hero — the espresso "Today's Brew" masthead. */
+/** Hero - the espresso "Today's Brew" masthead. */
 export const hero = {
-  eyebrow: "Today's Brew —",
+  eyebrow: "Today's Brew -",
   nameLine: "Mattie Phillips,",
   titleLine: "player-coach engineer.",
   // `firm` is bolded inline; `blurb` follows it.
   firm: "Code Brew Consulting",
   blurb:
-    " is my independent software practice — senior, hands-on help with custom software, connected products, and engineering leadership. Nine years in, I still lead teams without ever leaving the code.",
+    " is my independent software practice - senior, hands-on help with custom software, connected products, and engineering leadership. Nine years in, I still lead teams without ever leaving the code.",
   primaryCta: { label: "See the menu", href: "#menu" },
   secondaryCta: { label: "Read my resume", href: "#career" },
 } as const;
 
-/** About — "Pull up a chair". */
+/** About - "Pull up a chair". */
 export const about = {
-  eyebrow: "— Pull up a chair —",
+  eyebrow: "- Pull up a chair -",
   title: "A people-first engineer who likes the hard problems.",
   bio:
-    "I'm Mattie Phillips — a software engineering leader with nine years of full-stack delivery across fintech, connected products, and digital platforms. I went from staff engineer to director of engineering, but I never left the code: I lead teams as a player-coach, set architecture direction, and care just as much about the engineers writing the software as the software itself. Code Brew Consulting is the practice I run when I'm building for clients directly.",
+    "I'm Mattie Phillips - a software engineering leader with nine years of full-stack delivery across fintech, connected products, and digital platforms. I lead teams as a player-coach, set architecture direction, and care just as much about the engineers writing the software as the software itself. Code Brew Consulting is the practice I run when I'm building for clients directly.",
   pills: [
-    "Player-coach leadership",
+    "Versatile tech skill-set",
+    "Digital products",
     "Fintech",
     "Connected products & IoT",
-    "Digital product",
     "AI engineering",
   ],
 } as const;
 
-/** The Menu — consulting services. */
+/** The Menu - consulting services. */
 export interface Service {
   name: string;
   tag: "Project" | "Advisory";
@@ -53,28 +49,34 @@ export interface Service {
 
 export const services: Service[] = [
   {
-    name: "Custom Software & Platforms",
+    name: "Custom Applications",
     tag: "Project",
-    desc: "Full-stack web and backend builds — like a custom .NET Core platform that replaced costly licensed software end to end.",
+    desc: "Full-stack web, mobile and backend builds - like a custom .NET Core platform that replaced costly licensed software end to end.",
   },
+  {
+    name: "Team Practices",
+    tag: "Advisory",
+    desc: "Clean, secure API integrations with platforms like Dynamics 365 Business Central - stateless and built to last.",
+  },
+  {
+    name: "Mobile Builds",
+    tag: "Project",
+    desc: "Native and cross-platform mobile builds - from fintech apps to connected-product companion apps. Build, ship, and maintain.",
+  },
+  {
+    name: "AI Adoption",
+    tag: "Advisory",
+    desc: "Guidance and hands-on help for teams adopting AI - from RAG to LLMs to generative AI, with a focus on practical, production-ready solutions.",
+  },
+
   {
     name: "Connected Products & IoT",
     tag: "Project",
-    desc: "End-to-end IoT build-outs — edge devices, messaging, and the cloud backends that tie hardware and software together.",
-  },
-  {
-    name: "ERP & Systems Integration",
-    tag: "Project",
-    desc: "Clean, secure API integrations with platforms like Dynamics 365 Business Central — stateless and built to last.",
-  },
-  {
-    name: "Fractional Leadership & Advisory",
-    tag: "Advisory",
-    desc: "Staff/principal-level technical direction, architecture reviews, and player-coach engineering leadership for your team.",
+    desc: "End-to-end IoT build-outs - edge devices, messaging, and the cloud backends that tie hardware and software together.",
   },
 ];
 
-/** Selected Work — "House Specials" project cards. */
+/** Selected Work - "House Specials" project cards. */
 export interface Project {
   name: string;
   category: string;
@@ -92,7 +94,7 @@ export const projects: Project[] = [
   {
     name: "Engineering Team Transformation",
     category: "ENGINEERING LEADERSHIP",
-    desc: "Led a 10-person org through a cultural and technical reset at BiggerPockets — drove AI adoption from resistant to ~80%, modernized the stack, designed a career ladder, and rebuilt the product–engineering relationship.",
+    desc: "Led a 10-person org through a cultural and technical reset at BiggerPockets - drove AI adoption from resistant to ~80%, modernized the stack, designed a career ladder, and rebuilt the product–engineering relationship.",
     stack: ["Leadership", "AI adoption", "Career ladder"],
   },
   {
@@ -104,7 +106,7 @@ export const projects: Project[] = [
   {
     name: "End-to-End IoT Build-Outs",
     category: "CONNECTED PRODUCTS",
-    desc: "Designed and shipped connected-product systems from edge devices to cloud — serverless backends, device messaging, and a zero-downtime migration of hundreds of thousands of IoT devices to AWS.",
+    desc: "Designed and shipped connected-product systems from edge devices to cloud - serverless backends, device messaging, and a zero-downtime migration of hundreds of thousands of IoT devices to AWS.",
     stack: ["AWS IoT", "Azure IoT Hub", "Serverless"],
   },
   {
@@ -115,7 +117,7 @@ export const projects: Project[] = [
   },
 ];
 
-/** The Receipt — resume, itemized. */
+/** The Receipt - resume, itemized. */
 export interface Role {
   title: string;
   company: string;
@@ -130,7 +132,7 @@ export const roles: Role[] = [
     company: "BiggerPockets · Remote",
     dates: "Dec 2025 – Jun 2026",
     bullets: [
-      "First head of engineering for a 10-person org — led as a player-coach while still contributing as a staff engineer.",
+      "First head of engineering for a 10-person org - led as a player-coach while still contributing as a staff engineer.",
       "Drove AI adoption from resistant to ~80% in four months and launched a consumer AI search (Pinecone RAG, GPT-4o, SSE streaming).",
       "Rebuilt the product–engineering relationship, designed a career ladder, and led a Rails→React modernization.",
     ],
@@ -141,7 +143,7 @@ export const roles: Role[] = [
     company: "Code Brew Consulting · Grand Rapids, MI",
     dates: "Apr 2025 – Dec 2025",
     bullets: [
-      "Ran the full engagement lifecycle — business development, scoping, pricing — alongside hands-on staff-level delivery.",
+      "Ran the full engagement lifecycle - business development, scoping, pricing - alongside hands-on staff-level delivery.",
       "Built a custom .NET Core shipping & receiving platform integrated with Dynamics 365 Business Central, replacing costly licensed software.",
       "Designed a preventative production-halt safety system protecting thousands in inventory per averted batch.",
     ],
@@ -187,7 +189,7 @@ export const resume = {
 
 /**
  * Copy + options for the resume-request / contact form. Voiced to read as a
- * low-effort, confident trade — a name and an email, resume in your inbox now.
+ * low-effort, confident trade - a name and an email, resume in your inbox now.
  * The reason `value`s must match the Lambda's REASON_LABELS keys.
  */
 export const resumeForm = {
@@ -196,17 +198,17 @@ export const resumeForm = {
   ctaShort: "Request resume",
 
   eyebrow: "Resume & contact",
-  title: "Request my resume — straight to your inbox",
+  title: "Request my resume - straight to your inbox",
   intro:
-    "Drop your name and email and the resume lands in your inbox right away — PDF attached, no waiting. I just like to know who I'm talking to.",
+    "Drop your name and email and the resume lands in your inbox right away - PDF attached, no waiting. I just like to know who I'm talking to.",
   reassurance: "Instant delivery · no spam · just so I know who's reaching out.",
 
   nameLabel: "Your name",
   emailLabel: "Email",
   messageLabel: "Anything you'd like to add?",
-  messagePlaceholder: "A role you're hiring for, what caught your eye — optional.",
+  messagePlaceholder: "A role you're hiring for, what caught your eye - optional.",
   reasonsLegend: "Why are you reaching out?",
-  reasonsHint: "Optional — pick any that fit.",
+  reasonsHint: "Optional - pick any that fit.",
 
   submitLabel: "Send it over →",
   submitBusyLabel: "Sending…",
@@ -220,10 +222,10 @@ export const resumeForm = {
     { value: "other", label: "Other" },
   ],
 
-  // Success state — warm and human, on-theme with the coffee house.
+  // Success state - warm and human, on-theme with the coffee house.
   successTitle: "Order received! ☕",
   successBody:
-    "Check your inbox — the resume should land in a moment, with a quick note from me. If it's hiding, peek in spam, or just reply to that email and it comes straight to me.",
+    "Check your inbox - the resume should land in a moment, with a quick note from me. If it's hiding, peek in spam, or just reply to that email and it comes straight to me.",
 
   // Returning visitor (remembered for 7 days in this browser).
   returnTitle: "Welcome back",

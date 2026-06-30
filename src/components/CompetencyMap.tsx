@@ -202,7 +202,7 @@ export default function CompetencyMap() {
     <section className="section cmap" id="skills">
       <div className="container reveal" ref={reveal}>
           <div className="section__head">
-            <p className="section__eyebrow">— Cupping Notes —</p>
+            <p className="section__eyebrow">— The House Blend —</p>
             <h2 className="section__title">Competency map</h2>
             <p className="section__sub">
               A schematic of what I do — four core competencies down to the work that
