@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -8,6 +9,12 @@ import {
 import { competencyTree, type CompNode } from "../data/competencies";
 import { useReveal } from "../hooks/useReveal";
 import "./CompetencyMap.css";
+
+// useLayoutEffect on the client (we need to swap the zoom animation before
+// paint to avoid a flash), but a no-op useEffect during SSR/prerender where
+// layout effects don't run — avoids React's useLayoutEffect-on-server warning.
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 const ROOT: CompNode = { code: "", label: "Competencies", children: competencyTree };
 const ROOT_PTS: Array<[number, number]> = [
@@ -86,7 +93,7 @@ export default function CompetencyMap() {
   }
 
   // ---- Phase 2: the freshly-rendered level emerges from the same point. ----
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const p = pending.current;
     pending.current = null;
     if (!p) return;
