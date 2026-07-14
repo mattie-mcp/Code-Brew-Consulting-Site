@@ -320,7 +320,7 @@ export class CodeBrewSiteStack extends Stack {
 
     // --- Lambda handler --------------------------------------------------
     const formFn = new lambda.Function(this, 'ResumeRequestFn', {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset(
         path.join(__dirname, '..', 'lambda', 'resume-request'),
