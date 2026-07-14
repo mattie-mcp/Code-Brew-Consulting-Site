@@ -36,11 +36,12 @@ const configs: Record<
   production: {
     stackId: 'CodeBrewSiteStack',
     domainName: 'codebrewconsulting.com',
-    // TODO: switch back to hello@codebrewconsulting.com once the domain is
-    // verified in SES (DKIM). Using a verified gmail sender for now.
-    senderEmail: 'Mattie Phillips <mphillips1695@gmail.com>',
-    notifyEmail: 'mphillips1695@gmail.com',
-    replyToEmail: 'mphillips1695@gmail.com',
+    // Domain verified in SES via Easy DKIM (see SenderDomainIdentity in the
+    // stack), so the apex domain can send. Resume email uses admin@ for all of
+    // FROM / Reply-To / owner notification.
+    senderEmail: 'Mattie Phillips <admin@codebrewconsulting.com>',
+    notifyEmail: 'admin@codebrewconsulting.com',
+    replyToEmail: 'admin@codebrewconsulting.com',
     description:
       'Static hosting for codebrewconsulting.com (S3 + CloudFront + ACM + Route 53).',
   },
@@ -48,9 +49,11 @@ const configs: Record<
     stackId: 'CodeBrewSiteStack-staging',
     // No custom domain: served via the default *.cloudfront.net URL (no ACM/Route 53).
     domainName: undefined,
-    senderEmail: 'Mattie Phillips <mphillips1695@gmail.com>',
-    notifyEmail: 'mphillips1695@gmail.com',
-    replyToEmail: 'mphillips1695@gmail.com',
+    // Sends from the account-level codebrewconsulting.com SES identity created
+    // by the production stack (staging has no custom domain of its own).
+    senderEmail: 'Mattie Phillips <admin@codebrewconsulting.com>',
+    notifyEmail: 'admin@codebrewconsulting.com',
+    replyToEmail: 'admin@codebrewconsulting.com',
     description:
       'Staging environment for the Code Brew site (S3 + CloudFront, default domain).',
   },
