@@ -16,6 +16,7 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as ses from 'aws-cdk-lib/aws-ses';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
@@ -99,6 +100,19 @@ export class CodeBrewSiteStack extends Stack {
           validation: acm.CertificateValidation.fromDns(hostedZone!),
         })
       : undefined;
+
+    // ---------------------------------------------------------------------
+    // SES sender identity for the apex domain (Easy DKIM). Verifying the whole
+    // domain lets any address on it — e.g. admin@<domain> — be used as the
+    // resume email FROM/Reply-To. The DKIM CNAME records are written into the
+    // hosted zone automatically; SES verifies asynchronously once DNS
+    // propagates. Only provisioned with a custom domain (production).
+    // ---------------------------------------------------------------------
+    if (hasCustomDomain) {
+      new ses.EmailIdentity(this, 'SenderDomainIdentity', {
+        identity: ses.Identity.publicHostedZone(hostedZone!),
+      });
+    }
 
     // ---------------------------------------------------------------------
     // Private S3 bucket for the site artifacts (Vite `dist/` output).
